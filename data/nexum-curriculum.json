@@ -1,0 +1,1083 @@
+{
+  "version": "1.0",
+  "snapshotDate": "2026-09-01",
+  "snapshotLabel": "Snapshot didáctico · 01 sep 2026",
+  "snapshotNote": "Cifras congeladas a propósito: los ejercicios tienen una única respuesta correcta y la clase funciona sin depender de las APIs. El botón «Dato vivo» consulta las mismas fuentes que el terminal y muestra la diferencia contra el snapshot.",
+  "instructorPin": "3141",
+  "levels": [
+    { "xp": 0, "title": "Observador", "note": "Reconoce las secciones del terminal" },
+    { "xp": 60, "title": "Lector de datos", "note": "Interpreta una cifra con su unidad y su fecha" },
+    { "xp": 140, "title": "Analista junior", "note": "Cruza dos métricas y saca una conclusión" },
+    { "xp": 240, "title": "Analista", "note": "Explica un mercado completo con sus riesgos" },
+    { "xp": 360, "title": "Analista senior", "note": "Domina las siete capas del terminal" }
+  ],
+  "modules": [
+    {
+      "id": "orientacion",
+      "code": "MAP",
+      "order": 1,
+      "title": "Cómo se lee el terminal",
+      "subtitle": "Las siete capas de Blockfinity Research y en qué orden se recorren",
+      "vertical": "Orientación",
+      "href": "/",
+      "stage": "map",
+      "duration": 8,
+      "concept": {
+        "what": "El terminal no es una lista de gráficos: es una cadena de decisión. Cada vertical responde una pregunta distinta y se lee en orden — primero qué se está tokenizando, después con qué dinero se paga, sobre qué infraestructura corre, quién captura el valor, a qué precio cotiza y qué puede salir mal.",
+        "read": "Toda cifra del terminal viene con tres cosas: unidad (dólares, porcentaje, conteo), fuente y timestamp. Si falta alguna, el dato no se usa. Un número sin fecha no es un dato, es un recuerdo.",
+        "why": "Un analista que abre el terminal sin ruta salta de gráfico en gráfico y arma una tesis con lo primero que le llamó la atención. La ruta evita ese sesgo: el orden de lectura es el orden del argumento."
+      },
+      "metrics": [
+        { "id": "map.verticals", "label": "Verticales de decisión", "value": 7, "unit": "count", "hint": "Cada una responde una pregunta de negocio, no un tipo de dato." },
+        { "id": "map.views", "label": "Vistas en el terminal", "value": 25, "unit": "count", "hint": "Todas cuelgan de alguna de las siete verticales." },
+        { "id": "map.sources", "label": "Fuentes externas conectadas", "value": 15, "unit": "count", "hint": "CoinGecko, DeFiLlama, Crypto.com, Yahoo, Blockscout, Dune y otras." },
+        { "id": "map.proprietary", "label": "Piezas propietarias", "value": 3, "unit": "count", "hint": "Lo dorado del terminal es de Blockfinity: BBI, índices y el hub de tokenización.", "proprietary": true }
+      ],
+      "charts": [],
+      "scheme": {
+        "title": "La cadena de decisión",
+        "caption": "De izquierda a derecha, el orden en que se arma una tesis. Las flechas son dependencias: no se juzga un protocolo DeFi sin saber sobre qué cadena corre.",
+        "nodes": [
+          { "id": "tkn", "label": "Tokenización", "sub": "¿Qué activo entra?", "kind": "input", "col": 0, "row": 0 },
+          { "id": "stb", "label": "Stablecoins", "sub": "¿Con qué se paga?", "kind": "input", "col": 0, "row": 1 },
+          { "id": "chn", "label": "Blockchains", "sub": "¿Dónde corre?", "kind": "chain", "col": 1, "row": 0 },
+          { "id": "dfi", "label": "DeFi", "sub": "¿Quién captura valor?", "kind": "process", "col": 2, "row": 0 },
+          { "id": "mkt", "label": "Mercado", "sub": "¿A qué precio?", "kind": "process", "col": 2, "row": 1 },
+          { "id": "rsk", "label": "Riesgo", "sub": "¿Qué puede fallar?", "kind": "output", "col": 3, "row": 0 },
+          { "id": "brf", "label": "Tesis", "sub": "Informe y recomendación", "kind": "output", "col": 3, "row": 1 }
+        ],
+        "edges": [
+          { "from": "tkn", "to": "chn", "label": "emite" },
+          { "from": "stb", "to": "chn", "label": "liquida" },
+          { "from": "chn", "to": "dfi" },
+          { "from": "chn", "to": "mkt" },
+          { "from": "dfi", "to": "rsk" },
+          { "from": "mkt", "to": "brf" },
+          { "from": "rsk", "to": "brf" }
+        ],
+        "legend": [
+          { "kind": "input", "label": "Qué se mueve" },
+          { "kind": "chain", "label": "Infraestructura" },
+          { "kind": "process", "label": "Dónde se mide" },
+          { "kind": "output", "label": "Qué se concluye" }
+        ]
+      },
+      "glossary": [
+        { "term": "Vertical", "def": "Agrupación del terminal por pregunta de negocio (tokenización, stablecoins…), no por tipo de dato." },
+        { "term": "Timestamp", "def": "Momento exacto en que se consultó la fuente. Todo dato del terminal lo muestra." },
+        { "term": "Fuente", "def": "Origen externo del dato, con enlace. Lo propietario de Blockfinity se marca en dorado." },
+        { "term": "Dato en caché", "def": "Última respuesta buena guardada cuando la fuente no contesta. Se avisa siempre." }
+      ],
+      "checkpoints": [
+        "Nombrar las siete verticales y la pregunta que responde cada una",
+        "Explicar por qué una cifra sin fuente ni fecha no se usa",
+        "Ubicar en qué vertical buscar un dato cualquiera"
+      ],
+      "exercises": [
+        {
+          "id": "ori-1",
+          "type": "order",
+          "xp": 20,
+          "prompt": "Ordená el recorrido de lectura del terminal, de la primera pregunta a la última.",
+          "items": [
+            "¿Qué activo se está tokenizando?",
+            "¿Con qué dinero digital se paga?",
+            "¿Sobre qué infraestructura corre?",
+            "¿Quién captura el valor?",
+            "¿Qué puede salir mal?"
+          ],
+          "hint": "El riesgo siempre se evalúa al final, cuando ya sabés qué estás mirando.",
+          "explain": "La ruta va del activo al riesgo. Empezar por el precio es el error más común: el precio es la consecuencia, no la causa."
+        },
+        {
+          "id": "ori-2",
+          "type": "quiz",
+          "xp": 15,
+          "prompt": "Una card del terminal muestra «$285.4B · Fuente: DeFiLlama · consultado 01/09 08:14». ¿Qué falta para poder citar esa cifra en un informe?",
+          "options": [
+            "Nada: unidad, fuente y fecha están completas",
+            "Falta el porcentaje de variación",
+            "Falta el nombre del analista que la revisó",
+            "Falta convertirla a bolivianos"
+          ],
+          "answer": 0,
+          "hint": "Repasá los tres requisitos mínimos de un dato utilizable.",
+          "explain": "Unidad, fuente y timestamp: los tres están. La variación es útil, pero no es requisito para citar el dato."
+        },
+        {
+          "id": "ori-3",
+          "type": "match",
+          "xp": 20,
+          "prompt": "Emparejá cada pregunta con la vertical del terminal que la responde.",
+          "pairs": [
+            { "term": "¿Cuánto dólar digital circula y en qué red?", "def": "Stablecoin Intelligence" },
+            { "term": "¿Qué activos reales ya están on-chain?", "def": "Tokenization Hub" },
+            { "term": "¿Qué protocolo genera ingresos de verdad?", "def": "Protocol Analytics" },
+            { "term": "¿Cuánto se perdió en hackeos este año?", "def": "Exploits & Seguridad" }
+          ],
+          "hint": "El nombre de la vertical casi siempre contiene la respuesta.",
+          "explain": "Cada vertical del menú está nombrada por la decisión que habilita, no por la fuente de la que sale el dato."
+        }
+      ]
+    },
+    {
+      "id": "tokenizacion",
+      "code": "TKN",
+      "order": 2,
+      "title": "Tokenización de activos reales",
+      "subtitle": "Qué hay realmente on-chain, quién lo emite y qué parte del proceso no es blockchain",
+      "vertical": "Institutional Intelligence",
+      "href": "/tokenizacion",
+      "stage": "dashboard",
+      "duration": 12,
+      "concept": {
+        "what": "Tokenizar es representar un activo que existe fuera de la cadena — un bono del Tesoro, un crédito privado, oro en bóveda — como un token transferible. El token no crea el activo: apunta a él.",
+        "read": "El market cap RWA se publica en dos versiones. La amplia incluye stablecoins y tokens de gobernanza; la activa los excluye y es la que importa, porque mide activos reales tokenizados y no dinero digital. Siempre verificá cuál estás citando.",
+        "why": "Es el eje del producto de Blockfinity. La pregunta comercial no es «cuánto vale el mercado», sino «qué clase de activo ya tiene infraestructura probada y cuál sigue siendo piloto»."
+      },
+      "metrics": [
+        { "id": "rwa.active", "label": "RWA Active AUM", "value": 32400000000, "unit": "usd", "deltaPct": 4.8, "live": true, "hint": "Excluye stablecoins y tokens de gobernanza. Es la cifra que se cita.", "spark": [18.9, 20.4, 21.8, 23.1, 24.6, 25.9, 27.2, 28.4, 29.6, 30.7, 31.5, 32.4] },
+        { "id": "rwa.onchain", "label": "RWA Onchain AUM", "value": 41700000000, "unit": "usd", "deltaPct": 3.9, "live": true, "hint": "Versión amplia. La diferencia con la activa son exclusiones metodológicas." },
+        { "id": "rwa.defiTvl", "label": "TVL RWA en DeFi", "value": 11800000000, "unit": "usd", "deltaPct": 6.1, "live": true, "hint": "Parte del RWA que además trabaja como colateral en protocolos." },
+        { "id": "rwa.issuers", "label": "Emisores activos", "value": 184, "unit": "count", "deltaPct": 2.2, "live": true, "hint": "Un mercado con pocos emisores grandes concentra riesgo de contraparte." }
+      ],
+      "charts": [
+        {
+          "id": "rwa.sectors",
+          "kind": "bars",
+          "title": "Qué se tokeniza — Active AUM por clase",
+          "caption": "Dos clases explican el 80% del mercado. Todo lo demás sigue siendo piloto, por más titulares que genere.",
+          "unit": "usd",
+          "data": [
+            { "label": "Bonos del Tesoro", "value": 14800000000 },
+            { "label": "Crédito privado", "value": 11200000000 },
+            { "label": "Commodities", "value": 3100000000 },
+            { "label": "Inmuebles", "value": 1600000000 },
+            { "label": "Acciones", "value": 1100000000 },
+            { "label": "Otros", "value": 600000000 }
+          ],
+          "annotations": [
+            { "at": 0, "text": "Tesoro y crédito privado suman $26.0B: el 80.2% del mercado activo." },
+            { "at": 3, "text": "Inmuebles lleva años de anuncios y sigue en 4.9%: liquidez y marco legal son el cuello de botella." }
+          ]
+        },
+        {
+          "id": "rwa.trend",
+          "kind": "area",
+          "title": "Doce meses de Active AUM",
+          "caption": "Crecimiento sostenido, sin el salto vertical que suele delatar un cambio de metodología.",
+          "unit": "usd",
+          "data": [
+            { "label": "Sep", "value": 18900000000 },
+            { "label": "Oct", "value": 20400000000 },
+            { "label": "Nov", "value": 21800000000 },
+            { "label": "Dic", "value": 23100000000 },
+            { "label": "Ene", "value": 24600000000 },
+            { "label": "Feb", "value": 25900000000 },
+            { "label": "Mar", "value": 27200000000 },
+            { "label": "Abr", "value": 28400000000 },
+            { "label": "May", "value": 29600000000 },
+            { "label": "Jun", "value": 30700000000 },
+            { "label": "Jul", "value": 31500000000 },
+            { "label": "Ago", "value": 32400000000 }
+          ],
+          "annotations": [
+            { "at": 11, "text": "+71.4% en doce meses. Ese es el número que va en la portada, no el mensual." }
+          ]
+        }
+      ],
+      "scheme": {
+        "title": "Cadena de una emisión tokenizada",
+        "caption": "Seis etapas. Solo las dos últimas ocurren en la blockchain — las cuatro primeras deciden si el token vale algo.",
+        "nodes": [
+          { "id": "act", "label": "Activo real", "sub": "Bono · crédito · oro", "kind": "input", "col": 0, "row": 0 },
+          { "id": "cus", "label": "Custodia", "sub": "Bóveda · depositario", "kind": "process", "col": 1, "row": 0 },
+          { "id": "ver", "label": "Verificación", "sub": "Auditor externo", "kind": "process", "col": 2, "row": 0 },
+          { "id": "emi", "label": "Emisión", "sub": "Vehículo legal", "kind": "process", "col": 3, "row": 0 },
+          { "id": "tok", "label": "Token", "sub": "Registro on-chain", "kind": "chain", "col": 4, "row": 0 },
+          { "id": "sec", "label": "Secundario", "sub": "Plataforma autorizada", "kind": "output", "col": 5, "row": 0 }
+        ],
+        "edges": [
+          { "from": "act", "to": "cus" },
+          { "from": "cus", "to": "ver" },
+          { "from": "ver", "to": "emi" },
+          { "from": "emi", "to": "tok", "label": "on-chain" },
+          { "from": "tok", "to": "sec" }
+        ],
+        "legend": [
+          { "kind": "input", "label": "Mundo físico" },
+          { "kind": "process", "label": "Off-chain: legal y operativo" },
+          { "kind": "chain", "label": "On-chain" },
+          { "kind": "output", "label": "Mercado" }
+        ]
+      },
+      "glossary": [
+        { "term": "RWA", "def": "Real World Asset. Activo del mundo real representado por un token." },
+        { "term": "Active AUM", "def": "Valor de los RWA tokenizados excluyendo stablecoins y tokens de gobernanza. DeFiLlama lo llamaba Active Mcap hasta 2026." },
+        { "term": "Emisor", "def": "Entidad legal que responde por el activo subyacente y emite el token." },
+        { "term": "Colateral", "def": "Activo depositado como garantía en un protocolo para tomar prestado contra él." }
+      ],
+      "checkpoints": [
+        "Distinguir el Active AUM del Onchain AUM y saber cuál citar",
+        "Nombrar las dos clases de activo que dominan el mercado",
+        "Explicar por qué cuatro de las seis etapas de una emisión son off-chain"
+      ],
+      "exercises": [
+        {
+          "id": "tkn-1",
+          "type": "compute",
+          "xp": 25,
+          "prompt": "El market cap RWA total es $41.7B y el activo es $32.4B. ¿Qué porcentaje del total corresponde a lo que la metodología excluye?",
+          "given": [
+            { "label": "RWA total", "value": "$41.7B" },
+            { "label": "RWA activo", "value": "$32.4B" }
+          ],
+          "answer": 22.3,
+          "tolerance": 1,
+          "unit": "pct",
+          "hint": "Primero la diferencia en dólares; después esa diferencia sobre el total.",
+          "explain": "(41.7 − 32.4) / 41.7 = 22.3%. Casi un cuarto de la cifra amplia no son activos reales tokenizados: por eso el terminal cita siempre la activa."
+        },
+        {
+          "id": "tkn-2",
+          "type": "read",
+          "xp": 20,
+          "chartRef": "rwa.sectors",
+          "prompt": "Mirando el gráfico de clases de activo, ¿qué afirmación se sostiene con los datos?",
+          "options": [
+            "Bonos del Tesoro y crédito privado concentran más del 80% del mercado activo",
+            "Los inmuebles son la clase con mayor volumen tokenizado",
+            "Las acciones tokenizadas superan a los commodities",
+            "Ninguna clase individual pasa de $10B"
+          ],
+          "answer": 0,
+          "hint": "Sumá las dos barras más altas y dividí por 32.4.",
+          "explain": "14.8 + 11.2 = $26.0B sobre $32.4B = 80.2%. El mercado de RWA es, hoy, renta fija tokenizada con otro nombre."
+        },
+        {
+          "id": "tkn-3",
+          "type": "quiz",
+          "xp": 20,
+          "prompt": "Un emisor promete «respaldo 1:1 en oro, verificado on-chain». ¿Cuál es la pregunta correcta antes de aceptarlo?",
+          "options": [
+            "¿Quién custodia el oro y quién audita esa custodia fuera de la cadena?",
+            "¿En qué blockchain está emitido el token?",
+            "¿Cuál es el volumen diario del token?",
+            "¿Cuántos holders tiene el contrato?"
+          ],
+          "answer": 0,
+          "hint": "La cadena solo registra lo que alguien le declaró.",
+          "explain": "Ninguna blockchain puede verificar que haya oro en una bóveda. El respaldo lo garantizan la custodia y la auditoría off-chain; el token solo transfiere el derecho."
+        },
+        {
+          "id": "tkn-4",
+          "type": "order",
+          "xp": 15,
+          "prompt": "Ordená las etapas de una emisión tokenizada.",
+          "items": [
+            "Activo real en manos del emisor",
+            "Custodia en depositario",
+            "Verificación de auditor externo",
+            "Emisión por el vehículo legal",
+            "Registro del token on-chain"
+          ],
+          "hint": "El token es de las últimas etapas, no de las primeras.",
+          "explain": "El registro on-chain llega al final. Todo el trabajo que decide la calidad del activo ocurre antes, en el mundo legal."
+        }
+      ]
+    },
+    {
+      "id": "stablecoins",
+      "code": "STB",
+      "order": 3,
+      "title": "Stablecoins",
+      "subtitle": "La demanda real de dólar digital y en qué redes circula",
+      "vertical": "Institutional Intelligence",
+      "href": "/stablecoins",
+      "stage": "dashboard",
+      "duration": 10,
+      "concept": {
+        "what": "Una stablecoin es un token que promete valer siempre lo mismo que una moneda — casi siempre el dólar. Su supply en circulación es la medida más limpia de cuánta gente quiere dólares en cadena.",
+        "read": "El supply total sube y baja lento: es dinero que alguien depositó de verdad. Un salto brusco casi nunca es demanda nueva, es migración entre cadenas o cambio de emisor. Por eso se lee junto al desglose por red.",
+        "why": "En economías con restricción cambiaria — Bolivia entre ellas — la stablecoin es el producto de entrada. Sin saber dónde circula, no se elige sobre qué red construir."
+      },
+      "metrics": [
+        { "id": "stb.total", "label": "Supply total en circulación", "value": 285400000000, "unit": "usd", "deltaPct": 3.2, "live": true, "hint": "Variación a 30 días. Crecimiento lento y sostenido = demanda genuina.", "spark": [214, 222, 231, 238, 244, 251, 258, 264, 270, 276, 281, 285.4] },
+        { "id": "stb.dominance", "label": "Dominancia del líder", "value": 58.6, "unit": "pct", "deltaPct": -0.9, "live": true, "hint": "Un solo emisor con más de la mitad del mercado es riesgo de concentración." },
+        { "id": "stb.chains", "label": "Redes con supply relevante", "value": 24, "unit": "count", "live": true, "hint": "Relevante = más de $100M en circulación." },
+        { "id": "stb.growth", "label": "Crecimiento 12 meses", "value": 33.4, "unit": "pct", "hint": "De $214B a $285.4B en un año." }
+      ],
+      "charts": [
+        {
+          "id": "stb.byChain",
+          "kind": "bars",
+          "title": "Dónde circula el dólar digital",
+          "caption": "Dos redes concentran casi ocho de cada diez dólares. Elegir red no es una decisión técnica: es ir donde está la liquidez.",
+          "unit": "usd",
+          "data": [
+            { "label": "Ethereum", "value": 148900000000 },
+            { "label": "Tron", "value": 78200000000 },
+            { "label": "Solana", "value": 14600000000 },
+            { "label": "BSC", "value": 11300000000 },
+            { "label": "Base", "value": 8900000000 },
+            { "label": "Arbitrum", "value": 5400000000 },
+            { "label": "Otras (18)", "value": 18100000000 }
+          ],
+          "annotations": [
+            { "at": 0, "text": "Ethereum concentra el dólar institucional: liquidación grande y colateral DeFi." },
+            { "at": 1, "text": "Tron domina remesas y pagos minoristas: comisiones bajas y previsibles." }
+          ]
+        },
+        {
+          "id": "stb.trend",
+          "kind": "area",
+          "title": "Supply total, doce meses",
+          "caption": "Pendiente constante. Ni euforia ni fuga: entrada neta de capital mes a mes.",
+          "unit": "usd",
+          "data": [
+            { "label": "Sep", "value": 214000000000 },
+            { "label": "Oct", "value": 222000000000 },
+            { "label": "Nov", "value": 231000000000 },
+            { "label": "Dic", "value": 238000000000 },
+            { "label": "Ene", "value": 244000000000 },
+            { "label": "Feb", "value": 251000000000 },
+            { "label": "Mar", "value": 258000000000 },
+            { "label": "Abr", "value": 264000000000 },
+            { "label": "May", "value": 270000000000 },
+            { "label": "Jun", "value": 276000000000 },
+            { "label": "Jul", "value": 281000000000 },
+            { "label": "Ago", "value": 285400000000 }
+          ],
+          "annotations": [
+            { "at": 11, "text": "+33.4% interanual con pendiente pareja: señal de demanda estructural, no especulativa." }
+          ]
+        }
+      ],
+      "scheme": {
+        "title": "Ciclo de vida de un dólar tokenizado",
+        "caption": "Emisión contra depósito, circulación en cadena y rescate. Si el rescate no funciona, la paridad es una promesa sin garantía.",
+        "nodes": [
+          { "id": "usd", "label": "Dólar bancario", "sub": "Depósito del cliente", "kind": "input", "col": 0, "row": 0 },
+          { "id": "res", "label": "Reserva", "sub": "T-bills y efectivo", "kind": "process", "col": 1, "row": 0 },
+          { "id": "min", "label": "Emisión", "sub": "Mint del token", "kind": "chain", "col": 2, "row": 0 },
+          { "id": "cir", "label": "Circulación", "sub": "Pagos · trading · colateral", "kind": "chain", "col": 3, "row": 0 },
+          { "id": "red", "label": "Rescate", "sub": "Burn y devolución", "kind": "output", "col": 4, "row": 0 },
+          { "id": "att", "label": "Attestation", "sub": "Auditoría de reservas", "kind": "process", "col": 1, "row": 1 }
+        ],
+        "edges": [
+          { "from": "usd", "to": "res" },
+          { "from": "res", "to": "min", "label": "1:1" },
+          { "from": "min", "to": "cir" },
+          { "from": "cir", "to": "red" },
+          { "from": "att", "to": "res", "label": "verifica" }
+        ],
+        "legend": [
+          { "kind": "input", "label": "Dinero bancario" },
+          { "kind": "process", "label": "Respaldo y control" },
+          { "kind": "chain", "label": "On-chain" },
+          { "kind": "output", "label": "Salida" }
+        ]
+      },
+      "glossary": [
+        { "term": "Peg", "def": "La paridad prometida, normalmente 1 token = 1 dólar." },
+        { "term": "Supply en circulación", "def": "Tokens emitidos y todavía no rescatados. Es la medida de demanda." },
+        { "term": "Attestation", "def": "Informe periódico de un auditor sobre las reservas que respaldan la emisión." },
+        { "term": "Depeg", "def": "Momento en que el token deja de cotizar a su paridad. Suele durar poco y costar mucho." }
+      ],
+      "checkpoints": [
+        "Leer el supply total junto al desglose por red, nunca solo",
+        "Identificar las dos redes que concentran la liquidez",
+        "Explicar por qué el rescate es el punto crítico de una stablecoin"
+      ],
+      "exercises": [
+        {
+          "id": "stb-1",
+          "type": "compute",
+          "xp": 25,
+          "prompt": "Ethereum concentra $148.9B y Tron $78.2B del supply total de $285.4B. ¿Qué porcentaje suman entre las dos?",
+          "given": [
+            { "label": "Ethereum", "value": "$148.9B" },
+            { "label": "Tron", "value": "$78.2B" },
+            { "label": "Supply total", "value": "$285.4B" }
+          ],
+          "answer": 79.6,
+          "tolerance": 1,
+          "unit": "pct",
+          "hint": "Sumá las dos y dividí por el total.",
+          "explain": "(148.9 + 78.2) / 285.4 = 79.6%. Construir fuera de esas dos redes significa construir donde no está el dinero."
+        },
+        {
+          "id": "stb-2",
+          "type": "quiz",
+          "xp": 20,
+          "prompt": "El supply total salta 9% en dos días. ¿Cuál es la lectura más prudente?",
+          "options": [
+            "Revisar el desglose por red y por emisor: puede ser migración, no demanda nueva",
+            "Registrar una entrada masiva de capital institucional",
+            "Asumir un error de la fuente y descartar el dato",
+            "Concluir que el mercado cripto entró en euforia"
+          ],
+          "answer": 0,
+          "hint": "La demanda genuina se mueve lento porque implica depósitos reales.",
+          "explain": "Los saltos bruscos casi siempre son reasignación entre cadenas o emisores. El desglose lo resuelve en un minuto."
+        },
+        {
+          "id": "stb-3",
+          "type": "quiz",
+          "xp": 20,
+          "prompt": "Un cliente en Bolivia quiere recibir pagos del exterior en dólar digital, con comisiones bajas y previsibles. ¿Qué mira primero en el terminal?",
+          "options": [
+            "El supply por red, para elegir dónde hay liquidez y costo bajo",
+            "El precio de Bitcoin del día",
+            "El TVL total de DeFi",
+            "El ranking de fan tokens"
+          ],
+          "answer": 0,
+          "hint": "La pregunta es de circulación y costo, no de precio.",
+          "explain": "El desglose por red resuelve las dos variables del caso: dónde hay contraparte con quien operar y qué comisión se paga."
+        },
+        {
+          "id": "stb-4",
+          "type": "match",
+          "xp": 20,
+          "prompt": "Emparejá cada término con su definición.",
+          "pairs": [
+            { "term": "Peg", "def": "Paridad prometida frente al dólar" },
+            { "term": "Depeg", "def": "El token deja de cotizar a su paridad" },
+            { "term": "Attestation", "def": "Informe de auditor sobre las reservas" },
+            { "term": "Supply en circulación", "def": "Tokens emitidos y aún no rescatados" }
+          ],
+          "hint": "Dos hablan de precio, dos de respaldo.",
+          "explain": "Peg y depeg describen el precio; attestation y supply describen el respaldo y el tamaño del mercado."
+        }
+      ]
+    },
+    {
+      "id": "blockchains",
+      "code": "CHN",
+      "order": 4,
+      "title": "Infraestructura blockchain",
+      "subtitle": "Dónde ocurre la actividad y cómo se compara una red con otra",
+      "vertical": "Blockchain Intelligence",
+      "href": "/blockchains",
+      "stage": "dashboard",
+      "duration": 12,
+      "concept": {
+        "what": "Una blockchain es el registro compartido donde se anotan las transferencias. Compararlas exige medir lo mismo en todas: capital depositado, actividad real y grado de concentración.",
+        "read": "El TVL mide capital confiado a los protocolos de una red. Sirve para comparar tamaño, no calidad: una red puede tener TVL alto y muy pocas direcciones activas. Por eso el terminal cruza TVL con actividad y con el BBI propietario.",
+        "why": "Toda decisión de emisión pasa por acá. Si el cliente va a emitir sobre una red, hay que poder justificar la elección con métricas comparables, no con preferencias."
+      },
+      "metrics": [
+        { "id": "chn.tvl", "label": "TVL agregado, todas las redes", "value": 142000000000, "unit": "usd", "deltaPct": 2.4, "live": true, "hint": "Capital depositado en protocolos DeFi de todas las cadenas.", "spark": [96, 102, 109, 114, 118, 121, 127, 131, 134, 137, 140, 142] },
+        { "id": "chn.leader", "label": "Concentración del líder", "value": 55.2, "unit": "pct", "deltaPct": -1.6, "live": true, "hint": "Ethereum sobre el TVL agregado. Bajando lento hace dos años." },
+        { "id": "chn.count", "label": "Redes con TVL > $1B", "value": 19, "unit": "count", "deltaPct": 5.6, "live": true, "hint": "El umbral por debajo del cual una red no se considera para emitir." },
+        { "id": "chn.bbi", "label": "BBI del líder", "value": 8.7, "unit": "index", "hint": "Blockfinity Blockchain Index: 0 a 10, metodología propia.", "proprietary": true }
+      ],
+      "charts": [
+        {
+          "id": "chn.tvlByChain",
+          "kind": "bars",
+          "title": "TVL por red",
+          "caption": "El líder vale más que las seis siguientes juntas. Una concentración así se lee como riesgo de infraestructura, no como virtud.",
+          "unit": "usd",
+          "data": [
+            { "label": "Ethereum", "value": 78400000000 },
+            { "label": "Solana", "value": 12400000000 },
+            { "label": "BSC", "value": 8900000000 },
+            { "label": "Base", "value": 6200000000 },
+            { "label": "Arbitrum", "value": 5100000000 },
+            { "label": "Tron", "value": 4800000000 },
+            { "label": "Otras (32)", "value": 26200000000 }
+          ],
+          "annotations": [
+            { "at": 0, "text": "$78.4B sobre $142.0B = 55.2% del capital DeFi en una sola red." },
+            { "at": 3, "text": "Base creció desde cero en tres años: la única entrada nueva al top 5." }
+          ]
+        },
+        {
+          "id": "chn.bbiScores",
+          "kind": "bars",
+          "title": "BBI — Blockfinity Blockchain Index",
+          "caption": "Índice propietario de 0 a 10. Pondera seguridad, descentralización, actividad, liquidez y madurez del ecosistema.",
+          "unit": "index",
+          "proprietary": true,
+          "data": [
+            { "label": "Ethereum", "value": 8.7 },
+            { "label": "Solana", "value": 7.9 },
+            { "label": "Base", "value": 7.4 },
+            { "label": "Arbitrum", "value": 7.1 },
+            { "label": "BSC", "value": 6.6 },
+            { "label": "Tron", "value": 5.8 }
+          ],
+          "annotations": [
+            { "at": 5, "text": "Tron: mucho volumen de pagos, poca descentralización. El índice lo castiga donde el TVL no lo hace." }
+          ]
+        }
+      ],
+      "scheme": {
+        "title": "Cómo se construye el BBI",
+        "caption": "Cinco dimensiones ponderadas. La nota final no dice cuál red es mejor: dice para qué sirve cada una.",
+        "nodes": [
+          { "id": "seg", "label": "Seguridad", "sub": "Historial y costo de ataque", "kind": "input", "col": 0, "row": 0 },
+          { "id": "des", "label": "Descentralización", "sub": "Validadores y control", "kind": "input", "col": 0, "row": 1 },
+          { "id": "act", "label": "Actividad", "sub": "Direcciones y transacciones", "kind": "input", "col": 0, "row": 2 },
+          { "id": "liq", "label": "Liquidez", "sub": "TVL y profundidad", "kind": "input", "col": 0, "row": 3 },
+          { "id": "eco", "label": "Ecosistema", "sub": "Desarrolladores y apps", "kind": "input", "col": 0, "row": 4 },
+          { "id": "pon", "label": "Ponderación", "sub": "Pesos documentados", "kind": "process", "col": 1, "row": 2 },
+          { "id": "bbi", "label": "BBI 0–10", "sub": "Nota comparable", "kind": "output", "col": 2, "row": 2 }
+        ],
+        "edges": [
+          { "from": "seg", "to": "pon" },
+          { "from": "des", "to": "pon" },
+          { "from": "act", "to": "pon" },
+          { "from": "liq", "to": "pon" },
+          { "from": "eco", "to": "pon" },
+          { "from": "pon", "to": "bbi" }
+        ],
+        "legend": [
+          { "kind": "input", "label": "Dimensión medida" },
+          { "kind": "process", "label": "Metodología Blockfinity" },
+          { "kind": "output", "label": "Resultado publicable" }
+        ]
+      },
+      "glossary": [
+        { "term": "TVL", "def": "Total Value Locked: capital depositado en los protocolos de una red." },
+        { "term": "BBI", "def": "Índice propietario de Blockfinity que califica redes de 0 a 10 en cinco dimensiones." },
+        { "term": "Validador", "def": "Nodo que valida transacciones. Cuántos hay y quién los controla define la descentralización." },
+        { "term": "Layer 2", "def": "Red que procesa transacciones fuera de la cadena principal y liquida sobre ella." }
+      ],
+      "checkpoints": [
+        "Calcular la concentración del líder sobre el TVL agregado",
+        "Explicar por qué TVL alto no equivale a red mejor",
+        "Nombrar las cinco dimensiones del BBI"
+      ],
+      "exercises": [
+        {
+          "id": "chn-1",
+          "type": "compute",
+          "xp": 25,
+          "prompt": "Ethereum tiene $78.4B de TVL sobre un agregado de $142.0B. ¿Qué porcentaje concentra?",
+          "given": [
+            { "label": "TVL Ethereum", "value": "$78.4B" },
+            { "label": "TVL agregado", "value": "$142.0B" }
+          ],
+          "answer": 55.2,
+          "tolerance": 1,
+          "unit": "pct",
+          "hint": "Una división simple, pero mirá bien el denominador.",
+          "explain": "78.4 / 142.0 = 55.2%. Más de la mitad del capital DeFi vive en una sola red: es el dato de concentración que abre cualquier análisis de infraestructura."
+        },
+        {
+          "id": "chn-2",
+          "type": "read",
+          "xp": 20,
+          "chartRef": "chn.bbiScores",
+          "prompt": "Tron mueve enorme volumen de pagos pero recibe el BBI más bajo del top 6. ¿Qué explica esa distancia?",
+          "options": [
+            "El índice pondera descentralización y seguridad, no solo volumen",
+            "El índice mide únicamente el TVL de la red",
+            "Tron no tiene stablecoins en circulación",
+            "El BBI penaliza a las redes con comisiones bajas"
+          ],
+          "answer": 0,
+          "hint": "Mirá las cinco dimensiones del esquema.",
+          "explain": "Volumen es una dimensión de cinco. Una red puede ser excelente para pagos y mala para custodiar colateral institucional: el índice separa esos dos usos."
+        },
+        {
+          "id": "chn-3",
+          "type": "quiz",
+          "xp": 20,
+          "prompt": "Un cliente quiere emitir un bono tokenizado y pregunta sobre qué red hacerlo. ¿Qué combinación de métricas sostiene la recomendación?",
+          "options": [
+            "Liquidez de stablecoins en la red, más BBI de seguridad y descentralización",
+            "Precio del token nativo y su variación semanal",
+            "Cantidad de seguidores del proyecto en redes sociales",
+            "Número total de transacciones históricas"
+          ],
+          "answer": 0,
+          "hint": "La emisión necesita liquidación con dólar digital y garantías de seguridad.",
+          "explain": "Un bono se liquida contra stablecoins y debe sobrevivir años: liquidez para operar y BBI para justificar el riesgo de infraestructura."
+        }
+      ]
+    },
+    {
+      "id": "defi",
+      "code": "DFI",
+      "order": 5,
+      "title": "DeFi y captura de valor",
+      "subtitle": "Qué protocolo genera ingresos de verdad y cuál solo acumula depósitos",
+      "vertical": "Market Intelligence",
+      "href": "/defi",
+      "stage": "dashboard",
+      "duration": 12,
+      "concept": {
+        "what": "DeFi son protocolos que prestan, intercambian o generan rendimiento sin intermediario. Se los evalúa como a cualquier negocio: cuánto capital administran, cuánto cobran por administrarlo y a quién le queda ese cobro.",
+        "read": "TVL es el capital que le confiaron; ingresos es lo que efectivamente cobró. Son cosas distintas: un protocolo con $10B de TVL y $2M de ingresos anuales no es un buen negocio, es un depósito grande. La relación entre ambos es la primera pregunta.",
+        "why": "Es la diferencia entre recomendar un protocolo y recomendar una narrativa. Los ingresos se pueden auditar en cadena; las promesas no."
+      },
+      "metrics": [
+        { "id": "dfi.tvl", "label": "TVL agregado DeFi", "value": 142000000000, "unit": "usd", "deltaPct": 2.4, "live": true, "hint": "El mismo agregado del módulo de infraestructura, visto como capital administrado.", "spark": [96, 102, 109, 114, 118, 121, 127, 131, 134, 137, 140, 142] },
+        { "id": "dfi.revenue", "label": "Ingresos de protocolos, 30 días", "value": 412000000, "unit": "usd", "deltaPct": 8.3, "hint": "Comisiones efectivamente cobradas, no valor prometido." },
+        { "id": "dfi.dexVolume", "label": "Volumen DEX, 30 días", "value": 218000000000, "unit": "usd", "deltaPct": 5.7, "hint": "Cuánto se negoció en exchanges descentralizados." },
+        { "id": "dfi.earning", "label": "Protocolos con ingresos > $1M/mes", "value": 68, "unit": "count", "deltaPct": 4.6, "hint": "De más de tres mil protocolos rastreados. El negocio real es angosto." }
+      ],
+      "charts": [
+        {
+          "id": "dfi.revenueTop",
+          "kind": "bars",
+          "title": "Ingresos por protocolo, últimos 30 días",
+          "caption": "Tres protocolos capturan más de la mitad de lo que cobra todo el sector. La cola larga cobra casi nada.",
+          "unit": "usd",
+          "data": [
+            { "label": "Lido", "value": 92000000 },
+            { "label": "Aave", "value": 74000000 },
+            { "label": "Uniswap", "value": 61000000 },
+            { "label": "Jupiter", "value": 48000000 },
+            { "label": "Pendle", "value": 27000000 },
+            { "label": "Resto del sector", "value": 110000000 }
+          ],
+          "annotations": [
+            { "at": 0, "text": "Lido, Aave y Uniswap suman $227M: el 55.1% de los ingresos del sector." },
+            { "at": 5, "text": "«Resto» son más de tres mil protocolos repartiéndose $110M." }
+          ]
+        },
+        {
+          "id": "dfi.tvlTrend",
+          "kind": "area",
+          "title": "TVL agregado, doce meses",
+          "caption": "El capital administrado se recuperó, pero el gráfico no dice nada sobre rentabilidad. Para eso está el de arriba.",
+          "unit": "usd",
+          "data": [
+            { "label": "Sep", "value": 96000000000 },
+            { "label": "Oct", "value": 102000000000 },
+            { "label": "Nov", "value": 109000000000 },
+            { "label": "Dic", "value": 114000000000 },
+            { "label": "Ene", "value": 118000000000 },
+            { "label": "Feb", "value": 121000000000 },
+            { "label": "Mar", "value": 127000000000 },
+            { "label": "Abr", "value": 131000000000 },
+            { "label": "May", "value": 134000000000 },
+            { "label": "Jun", "value": 137000000000 },
+            { "label": "Jul", "value": 140000000000 },
+            { "label": "Ago", "value": 142000000000 }
+          ],
+          "annotations": [
+            { "at": 11, "text": "+47.9% de capital administrado en el año. Los ingresos crecieron menos: márgenes en compresión." }
+          ]
+        }
+      ],
+      "scheme": {
+        "title": "De dónde sale el ingreso de un protocolo",
+        "caption": "El usuario paga una comisión; el protocolo la reparte. Quién se queda con qué parte define si el token vale algo.",
+        "nodes": [
+          { "id": "usr", "label": "Usuario", "sub": "Presta · intercambia", "kind": "input", "col": 0, "row": 1 },
+          { "id": "fee", "label": "Comisión", "sub": "Cobro por operación", "kind": "chain", "col": 1, "row": 1 },
+          { "id": "lp", "label": "Proveedores", "sub": "Ponen el capital", "kind": "process", "col": 2, "row": 0 },
+          { "id": "tre", "label": "Tesorería", "sub": "Ingreso del protocolo", "kind": "process", "col": 2, "row": 2 },
+          { "id": "hld", "label": "Holders", "sub": "Recompra · reparto", "kind": "output", "col": 3, "row": 2 },
+          { "id": "gro", "label": "Reinversión", "sub": "Incentivos y desarrollo", "kind": "output", "col": 3, "row": 0 }
+        ],
+        "edges": [
+          { "from": "usr", "to": "fee", "label": "paga" },
+          { "from": "fee", "to": "lp", "label": "al capital" },
+          { "from": "fee", "to": "tre", "label": "al protocolo" },
+          { "from": "tre", "to": "hld" },
+          { "from": "tre", "to": "gro" }
+        ],
+        "legend": [
+          { "kind": "input", "label": "Demanda" },
+          { "kind": "chain", "label": "Cobro on-chain" },
+          { "kind": "process", "label": "Reparto" },
+          { "kind": "output", "label": "Destino final" }
+        ]
+      },
+      "glossary": [
+        { "term": "Ingresos del protocolo", "def": "Parte de la comisión que queda en la tesorería, no la que va a los proveedores de capital." },
+        { "term": "DEX", "def": "Exchange descentralizado: intercambio sin custodio, ejecutado por contratos." },
+        { "term": "Proveedor de liquidez", "def": "Quien deposita capital para que otros operen contra él, a cambio de comisión." },
+        { "term": "Rendimiento real", "def": "El que proviene de comisiones cobradas, no de emitir tokens nuevos." }
+      ],
+      "checkpoints": [
+        "Separar TVL de ingresos en la lectura de un protocolo",
+        "Identificar qué parte de la comisión llega a la tesorería",
+        "Detectar rendimiento pagado con emisión en lugar de comisiones"
+      ],
+      "exercises": [
+        {
+          "id": "dfi-1",
+          "type": "compute",
+          "xp": 25,
+          "prompt": "Lido ($92M), Aave ($74M) y Uniswap ($61M) sobre ingresos del sector de $412M en 30 días. ¿Qué porcentaje capturan los tres juntos?",
+          "given": [
+            { "label": "Top 3 sumados", "value": "$227M" },
+            { "label": "Sector completo", "value": "$412M" }
+          ],
+          "answer": 55.1,
+          "tolerance": 1.5,
+          "unit": "pct",
+          "hint": "Sumá los tres primeros y dividí por el total del sector.",
+          "explain": "227 / 412 = 55.1%. DeFi no es un mercado disperso: es un puñado de negocios rentables rodeado de miles de proyectos que casi no facturan."
+        },
+        {
+          "id": "dfi-2",
+          "type": "quiz",
+          "xp": 20,
+          "prompt": "Un protocolo tiene $10B de TVL y $2M de ingresos anuales. ¿Qué conclusión es correcta?",
+          "options": [
+            "Administra mucho capital pero cobra muy poco por hacerlo: hay que explicar de dónde saldría el valor",
+            "Es el protocolo más rentable del sector porque tiene el TVL más alto",
+            "El TVL alto garantiza que el token subirá de precio",
+            "No se puede opinar sin conocer el precio de su token"
+          ],
+          "answer": 0,
+          "hint": "Compará la escala del capital con la del cobro.",
+          "explain": "$2M sobre $10B es 0.02% anual. Es un depósito grande, no un negocio. El TVL mide confianza, los ingresos miden modelo de negocio."
+        },
+        {
+          "id": "dfi-3",
+          "type": "read",
+          "xp": 20,
+          "chartRef": "dfi.revenueTop",
+          "prompt": "El TVL del sector creció 47.9% en el año y los ingresos crecieron 8.3% en el último mes. ¿Qué hipótesis conviene revisar primero?",
+          "options": [
+            "Compresión de márgenes: entra más capital pero se cobra proporcionalmente menos",
+            "Los datos de TVL están mal medidos",
+            "Los usuarios dejaron de operar por completo",
+            "El sector dejó de cobrar comisiones"
+          ],
+          "answer": 0,
+          "hint": "Cuando el capital crece más rápido que el cobro, la tarifa efectiva baja.",
+          "explain": "Más competencia entre protocolos empuja las comisiones hacia abajo. Es la hipótesis por defecto cuando el capital crece más rápido que el ingreso."
+        },
+        {
+          "id": "dfi-4",
+          "type": "match",
+          "xp": 20,
+          "prompt": "Emparejá cada concepto con lo que mide.",
+          "pairs": [
+            { "term": "TVL", "def": "Capital confiado al protocolo" },
+            { "term": "Ingresos", "def": "Comisión que queda en la tesorería" },
+            { "term": "Volumen DEX", "def": "Cuánto se negoció en el período" },
+            { "term": "Rendimiento real", "def": "Retorno pagado con comisiones cobradas" }
+          ],
+          "hint": "Uno mide stock, dos miden flujo, uno mide calidad del retorno.",
+          "explain": "TVL es un stock; ingresos y volumen son flujos; el rendimiento real distingue el retorno genuino del pagado con emisión de tokens."
+        }
+      ]
+    },
+    {
+      "id": "mercado",
+      "code": "MKT",
+      "order": 6,
+      "title": "Mercado y precio",
+      "subtitle": "De dónde sale la cifra que muestra el terminal y cómo se lee el sentimiento",
+      "vertical": "Market Intelligence",
+      "href": "/mercado",
+      "stage": "dashboard",
+      "duration": 10,
+      "concept": {
+        "what": "El precio de un activo cripto no existe en un solo lugar: cada exchange tiene el suyo. Lo que muestra el terminal es una media ponderada por volumen, con la fuente y la hora declaradas.",
+        "read": "La dominancia de Bitcoin dice qué parte del mercado total es BTC. Sube cuando el capital busca refugio dentro de cripto y baja cuando rota hacia activos más chicos. El índice de miedo y codicia es un termómetro de sentimiento, no una señal de compra.",
+        "why": "El precio es el último eslabón de la cadena de decisión, no el primero. Se usa para dimensionar y para cronometrar, nunca como argumento único."
+      },
+      "metrics": [
+        { "id": "mkt.totalCap", "label": "Capitalización total del mercado", "value": 3420000000000, "unit": "usd", "deltaPct": 1.8, "live": true, "hint": "Suma del valor de todos los activos cripto rastreados." },
+        { "id": "mkt.btcDom", "label": "Dominancia de Bitcoin", "value": 57.8, "unit": "pct", "deltaPct": 0.6, "live": true, "hint": "Qué parte de esa capitalización es BTC." },
+        { "id": "mkt.volume", "label": "Volumen negociado 24 h", "value": 148000000000, "unit": "usd", "deltaPct": -4.2, "live": true, "hint": "Volumen bajo con precio subiendo = movimiento poco sostenido." },
+        { "id": "mkt.fng", "label": "Índice miedo y codicia", "value": 62, "unit": "index", "deltaPct": 6.9, "live": true, "hint": "0 = pánico, 100 = euforia. Termómetro, no señal." }
+      ],
+      "charts": [
+        {
+          "id": "mkt.sentiment",
+          "kind": "gauge",
+          "title": "Miedo y codicia",
+          "caption": "62 sobre 100: codicia moderada. Históricamente los extremos son los que informan; el medio no dice casi nada.",
+          "unit": "index",
+          "data": [{ "label": "Sentimiento", "value": 62 }],
+          "annotations": [
+            { "at": 0, "text": "Por debajo de 25 el mercado suele estar vendido en pánico; por encima de 75, comprado por euforia." }
+          ]
+        },
+        {
+          "id": "mkt.performance",
+          "kind": "delta",
+          "title": "Rendimiento a 90 días",
+          "caption": "Comparar activos exige el mismo período para todos. Cambiar la ventana cambia el ganador — por eso la ventana se declara siempre.",
+          "unit": "pct",
+          "data": [
+            { "label": "SOL", "value": 24.6 },
+            { "label": "BTC", "value": 18.4 },
+            { "label": "BNB", "value": 11.8 },
+            { "label": "ETH", "value": 9.2 },
+            { "label": "XRP", "value": -6.3 }
+          ],
+          "annotations": [
+            { "at": 4, "text": "Un activo en rojo dentro de un trimestre alcista merece explicación propia, no promedio." }
+          ]
+        }
+      ],
+      "scheme": {
+        "title": "De dónde sale el precio del terminal",
+        "caption": "Ningún precio es «el» precio: es un agregado declarado. Saber cómo se construyó evita discutir con el gráfico de otro.",
+        "nodes": [
+          { "id": "ex1", "label": "Exchange A", "sub": "Libro de órdenes", "kind": "input", "col": 0, "row": 0 },
+          { "id": "ex2", "label": "Exchange B", "sub": "Libro de órdenes", "kind": "input", "col": 0, "row": 1 },
+          { "id": "ex3", "label": "Exchange C", "sub": "Libro de órdenes", "kind": "input", "col": 0, "row": 2 },
+          { "id": "agg", "label": "Agregador", "sub": "Media ponderada por volumen", "kind": "process", "col": 1, "row": 1 },
+          { "id": "api", "label": "API + caché", "sub": "Fuente y timestamp", "kind": "chain", "col": 2, "row": 1 },
+          { "id": "car", "label": "Card del terminal", "sub": "Cifra citable", "kind": "output", "col": 3, "row": 1 }
+        ],
+        "edges": [
+          { "from": "ex1", "to": "agg" },
+          { "from": "ex2", "to": "agg" },
+          { "from": "ex3", "to": "agg" },
+          { "from": "agg", "to": "api" },
+          { "from": "api", "to": "car", "label": "con fuente" }
+        ],
+        "legend": [
+          { "kind": "input", "label": "Mercados" },
+          { "kind": "process", "label": "Agregación" },
+          { "kind": "chain", "label": "Transporte" },
+          { "kind": "output", "label": "Lo que ves" }
+        ]
+      },
+      "glossary": [
+        { "term": "Dominancia", "def": "Porcentaje de la capitalización total que corresponde a un activo." },
+        { "term": "Media ponderada por volumen", "def": "Promedio en el que cada exchange pesa según cuánto negoció." },
+        { "term": "Miedo y codicia", "def": "Índice 0–100 de sentimiento construido con volatilidad, volumen y encuestas." },
+        { "term": "Ventana", "def": "Período de comparación declarado (24 h, 7 d, 90 d). Sin ventana, un rendimiento no significa nada." }
+      ],
+      "checkpoints": [
+        "Explicar cómo se construye el precio que muestra el terminal",
+        "Leer dominancia y sentimiento sin convertirlos en señal de compra",
+        "Exigir la ventana temporal antes de comparar rendimientos"
+      ],
+      "exercises": [
+        {
+          "id": "mkt-1",
+          "type": "compute",
+          "xp": 25,
+          "prompt": "La capitalización total es $3.42T y Bitcoin domina el 57.8%. ¿Cuánto vale, en billones de dólares, todo lo que no es Bitcoin?",
+          "given": [
+            { "label": "Capitalización total", "value": "$3.42T" },
+            { "label": "Dominancia BTC", "value": "57.8%" }
+          ],
+          "answer": 1.44,
+          "tolerance": 0.08,
+          "unit": "usd_t",
+          "hint": "El resto es el 42.2% del total.",
+          "explain": "3.42 × 0.422 = $1.44T. Es la cifra que se usa para dimensionar el mercado no-Bitcoin antes de hablar de cualquier altcoin."
+        },
+        {
+          "id": "mkt-2",
+          "type": "quiz",
+          "xp": 20,
+          "prompt": "El índice de miedo y codicia marca 62. ¿Cuál es el uso correcto de ese dato en un informe?",
+          "options": [
+            "Describir el sentimiento del período, aclarando que no es señal de compra ni de venta",
+            "Recomendar comprar, porque la codicia indica tendencia alcista",
+            "Recomendar vender, porque cualquier codicia anticipa una caída",
+            "Ignorarlo: el sentimiento nunca se reporta"
+          ],
+          "answer": 0,
+          "hint": "62 es zona media; los extremos son los que informan.",
+          "explain": "El índice contextualiza, no decide. Solo en los extremos (bajo 25 o sobre 75) empieza a tener valor como contra-indicador, y aun así acompañado de otras métricas."
+        },
+        {
+          "id": "mkt-3",
+          "type": "read",
+          "xp": 20,
+          "chartRef": "mkt.performance",
+          "prompt": "Un cliente afirma «Solana rinde más que Bitcoin». Con el gráfico a la vista, ¿cuál es la respuesta profesional?",
+          "options": [
+            "Es cierto en la ventana de 90 días mostrada; en otra ventana el orden puede invertirse",
+            "Es falso: Bitcoin siempre rinde más",
+            "Es cierto y por lo tanto conviene rotar la cartera a Solana",
+            "No se puede responder sin conocer el precio de ambos activos"
+          ],
+          "answer": 0,
+          "hint": "Toda comparación de rendimiento vive dentro de su ventana.",
+          "explain": "24.6% contra 18.4% a 90 días es un hecho de esa ventana. Afirmarlo sin declarar el período es el error más frecuente en una presentación."
+        },
+        {
+          "id": "mkt-4",
+          "type": "order",
+          "xp": 15,
+          "prompt": "Ordená el camino que recorre un precio hasta llegar a la card del terminal.",
+          "items": [
+            "Libros de órdenes de los exchanges",
+            "Agregador calcula media ponderada por volumen",
+            "API interna consulta y guarda en caché",
+            "Card muestra la cifra con fuente y timestamp"
+          ],
+          "hint": "Empieza donde se cruzan las órdenes reales.",
+          "explain": "Cada eslabón agrega latencia y criterio. Por eso dos terminales pueden mostrar precios levemente distintos y ambos estar bien."
+        }
+      ]
+    },
+    {
+      "id": "riesgo",
+      "code": "RSK",
+      "order": 7,
+      "title": "Riesgo y seguridad",
+      "subtitle": "Qué falla realmente, cuánto cuesta y qué se puede recuperar",
+      "vertical": "Market Intelligence",
+      "href": "/seguridad",
+      "stage": "dashboard",
+      "duration": 10,
+      "concept": {
+        "what": "Un exploit es el aprovechamiento de una falla para extraer fondos. El terminal lleva registro de cada incidente relevante: monto, vector y qué se recuperó después.",
+        "read": "El vector dominante no es el contrato inteligente: son las llaves privadas comprometidas. Eso mueve la conversación de seguridad del código a la operación — quién firma, con qué dispositivo y con cuántas aprobaciones.",
+        "why": "Es la parte del análisis que protege al cliente y a la firma. Un informe que recomienda sin cuantificar el riesgo operativo está incompleto."
+      },
+      "metrics": [
+        { "id": "rsk.losses", "label": "Pérdidas, últimos 12 meses", "value": 1840000000, "unit": "usd", "deltaPct": -12.4, "hint": "Bajando, pero con incidentes individuales cada vez más grandes." },
+        { "id": "rsk.incidents", "label": "Incidentes registrados", "value": 148, "unit": "count", "deltaPct": -8.1, "hint": "Solo los de monto verificable y fuente pública." },
+        { "id": "rsk.median", "label": "Pérdida mediana por incidente", "value": 3200000, "unit": "usd", "deltaPct": 5.3, "hint": "La mediana, no el promedio: dos megaincidentes distorsionan cualquier media." },
+        { "id": "rsk.recovered", "label": "Fondos recuperados", "value": 11.4, "unit": "pct", "deltaPct": 2.1, "hint": "Congelamientos, negociación con el atacante y recompensas." }
+      ],
+      "charts": [
+        {
+          "id": "rsk.vectors",
+          "kind": "donut",
+          "title": "Vector de entrada del ataque",
+          "caption": "Casi la mitad de las pérdidas empiezan con una llave privada comprometida. El problema es operativo antes que técnico.",
+          "unit": "pct",
+          "data": [
+            { "label": "Llaves comprometidas", "value": 46 },
+            { "label": "Lógica del contrato", "value": 21 },
+            { "label": "Phishing e ingeniería social", "value": 17 },
+            { "label": "Manipulación de oráculo", "value": 9 },
+            { "label": "Otros", "value": 7 }
+          ],
+          "annotations": [
+            { "at": 0, "text": "Ninguna auditoría de código evita que un firmante entregue su llave." }
+          ]
+        },
+        {
+          "id": "rsk.monthly",
+          "kind": "area",
+          "title": "Pérdidas por mes",
+          "caption": "La tendencia baja, pero los picos siguen: un solo incidente puede pesar más que un semestre entero.",
+          "unit": "usd",
+          "data": [
+            { "label": "Sep", "value": 214000000 },
+            { "label": "Oct", "value": 96000000 },
+            { "label": "Nov", "value": 178000000 },
+            { "label": "Dic", "value": 142000000 },
+            { "label": "Ene", "value": 88000000 },
+            { "label": "Feb", "value": 312000000 },
+            { "label": "Mar", "value": 124000000 },
+            { "label": "Abr", "value": 74000000 },
+            { "label": "May", "value": 156000000 },
+            { "label": "Jun", "value": 198000000 },
+            { "label": "Jul", "value": 132000000 },
+            { "label": "Ago", "value": 126000000 }
+          ],
+          "annotations": [
+            { "at": 5, "text": "Febrero: un único incidente explica casi todo el mes. Los promedios mensuales engañan." }
+          ]
+        }
+      ],
+      "scheme": {
+        "title": "Anatomía de un incidente",
+        "caption": "Cinco etapas. La defensa efectiva actúa en las dos primeras; después solo queda mitigar.",
+        "nodes": [
+          { "id": "acc", "label": "Acceso", "sub": "Llave · phishing · bug", "kind": "input", "col": 0, "row": 0 },
+          { "id": "eje", "label": "Ejecución", "sub": "Transacción maliciosa", "kind": "chain", "col": 1, "row": 0 },
+          { "id": "ext", "label": "Extracción", "sub": "Salida de fondos", "kind": "chain", "col": 2, "row": 0 },
+          { "id": "lav", "label": "Dispersión", "sub": "Puentes y mezcladores", "kind": "process", "col": 3, "row": 0 },
+          { "id": "res", "label": "Respuesta", "sub": "Congelar · negociar", "kind": "output", "col": 4, "row": 0 },
+          { "id": "def", "label": "Defensa", "sub": "Multifirma · límites · monitoreo", "kind": "output", "col": 0, "row": 1 }
+        ],
+        "edges": [
+          { "from": "acc", "to": "eje" },
+          { "from": "eje", "to": "ext" },
+          { "from": "ext", "to": "lav" },
+          { "from": "lav", "to": "res", "label": "tarde" },
+          { "from": "def", "to": "acc", "label": "corta acá" }
+        ],
+        "legend": [
+          { "kind": "input", "label": "Entrada" },
+          { "kind": "chain", "label": "On-chain" },
+          { "kind": "process", "label": "Ocultamiento" },
+          { "kind": "output", "label": "Control" }
+        ]
+      },
+      "glossary": [
+        { "term": "Vector", "def": "La vía por la que el atacante entró: llave, contrato, oráculo o persona." },
+        { "term": "Multifirma", "def": "Esquema en el que una transacción necesita varias aprobaciones independientes." },
+        { "term": "Oráculo", "def": "Servicio que lleva precios externos a la cadena. Manipularlo permite liquidaciones falsas." },
+        { "term": "Mediana", "def": "Valor central de la serie. Resiste los extremos mucho mejor que el promedio." }
+      ],
+      "checkpoints": [
+        "Nombrar el vector dominante y su consecuencia operativa",
+        "Justificar por qué se usa mediana y no promedio",
+        "Ubicar en qué etapa del incidente todavía sirve la defensa"
+      ],
+      "exercises": [
+        {
+          "id": "rsk-1",
+          "type": "read",
+          "xp": 20,
+          "chartRef": "rsk.vectors",
+          "prompt": "El 46% de las pérdidas entra por llaves comprometidas. ¿Qué recomendación se desprende para un cliente que va a custodiar activos?",
+          "options": [
+            "Reforzar la operación de firma: multifirma, límites y monitoreo, además de auditar el código",
+            "Auditar el contrato una vez más y dar el tema por cerrado",
+            "Cambiar de blockchain a una con menos incidentes",
+            "Contratar un seguro y no modificar la operación"
+          ],
+          "answer": 0,
+          "hint": "El vector dominante no está en el código.",
+          "explain": "La auditoría de contrato ataca el 21%. El 46% se combate con procedimiento: quién firma, desde dónde y con cuántas aprobaciones."
+        },
+        {
+          "id": "rsk-2",
+          "type": "compute",
+          "xp": 25,
+          "prompt": "Se perdieron $1.84B en doce meses y se recuperó el 11.4%. ¿Cuántos millones de dólares se recuperaron?",
+          "given": [
+            { "label": "Pérdidas 12 m", "value": "$1.84B" },
+            { "label": "Recuperado", "value": "11.4%" }
+          ],
+          "answer": 210,
+          "tolerance": 12,
+          "unit": "usd_m",
+          "hint": "1.84B son 1840 millones.",
+          "explain": "1840 × 0.114 = $210M. Casi nueve de cada diez dólares robados no vuelven: por eso la prevención se financia sola."
+        },
+        {
+          "id": "rsk-3",
+          "type": "quiz",
+          "xp": 20,
+          "prompt": "El terminal reporta pérdida mediana de $3.2M y no el promedio. ¿Por qué?",
+          "options": [
+            "Porque unos pocos incidentes enormes inflan el promedio y distorsionan la lectura típica",
+            "Porque la mediana siempre es mayor que el promedio",
+            "Porque el promedio no se puede calcular con datos on-chain",
+            "Porque la mediana incluye los incidentes sin monto verificado"
+          ],
+          "answer": 0,
+          "hint": "Pensá en el mes de febrero del gráfico.",
+          "explain": "Con distribuciones de cola larga el promedio describe al outlier, no al caso típico. La mediana responde «cuánto se pierde en un incidente normal»."
+        },
+        {
+          "id": "rsk-4",
+          "type": "order",
+          "xp": 15,
+          "prompt": "Ordená las etapas de un incidente, de la primera a la última.",
+          "items": [
+            "Acceso: llave comprometida o falla explotada",
+            "Ejecución de la transacción maliciosa",
+            "Extracción de los fondos",
+            "Dispersión por puentes y mezcladores",
+            "Respuesta: congelamiento y negociación"
+          ],
+          "hint": "La respuesta llega siempre al final, y por eso recupera poco.",
+          "explain": "Entre la extracción y la respuesta suelen pasar minutos. Esa asimetría explica el 11.4% de recuperación."
+        }
+      ]
+    }
+  ]
+}

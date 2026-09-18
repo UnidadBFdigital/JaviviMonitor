@@ -1,0 +1,93 @@
+{
+  "_comment": "Timeline regulatorio Bolivia — datos curados y verificados con fuente. Editar este archivo para agregar eventos. datePrecision: day|month|year.",
+  "events": [
+    {
+      "date": "2026-06-29",
+      "datePrecision": "day",
+      "title": "Bolivia abandona el tipo de cambio fijo y adopta un régimen flexible",
+      "institution": "BCB",
+      "category": "Cambiario",
+      "summary": "Tras 15 años, el oficial deja de fijarse administrativamente en 6.86 compra / 6.96 venta y pasa a calcularse a diario según las operaciones del sistema financiero. El primer tipo de cambio bajo el nuevo régimen fue 9.73 Bs/USD.",
+      "implications": "La prima cambiaria del mercado paralelo se comprime fuertemente: el oficial converge hacia el precio de mercado. Analistas describen el esquema como flotación administrada, no libre.",
+      "sourceName": "Infobae — Bolivia adoptará un esquema de flotación cambiaria",
+      "sourceUrl": "https://www.infobae.com/america/america-latina/2026/06/27/bolivia-adoptara-un-esquema-de-flotacion-cambiaria-tras-15-anos-de-regimen-fijo/"
+    },
+    {
+      "date": "2025-12-01",
+      "datePrecision": "month",
+      "title": "El BCB empieza a publicar el Valor Referencial del Dólar (VRD)",
+      "institution": "BCB",
+      "category": "Cambiario",
+      "summary": "El BCB publica diariamente el VRD, promedio ponderado de las operaciones reales entre bancos y sus clientes en el mercado mayorista, conviviendo con el tipo de cambio fijo.",
+      "implications": "Primer reconocimiento oficial de un precio de mercado distinto al fijo; antecedente directo de la flexibilización de junio de 2026.",
+      "sourceName": "BCB — Tipo de Cambio Oficial",
+      "sourceUrl": "https://www.bcb.gob.bo/tco_reporte_ultima_cotizacion.php"
+    },
+    {
+      "date": "2024-06-25",
+      "datePrecision": "day",
+      "title": "BCB levanta la prohibición de criptoactivos (R.D. N° 082/2024)",
+      "institution": "BCB",
+      "category": "BCB",
+      "summary": "La Resolución de Directorio 082/2024 deroga la R.D. 144/2020 y habilita la compra/venta de activos virtuales a través de canales e Instrumentos Electrónicos de Pago, en coordinación con ASFI y UIF.",
+      "implications": "Punto de partida del mercado formal de activos virtuales en Bolivia. Las entidades financieras pueden canalizar operaciones; el boliviano sigue siendo la única moneda de curso legal.",
+      "sourceName": "BCB — Comunicado de Prensa CP35/2024",
+      "sourceUrl": "https://www.bcb.gob.bo/webdocs/files_noticias/CP_35%20NormativaActivosVirtuales4.pdf"
+    },
+    {
+      "date": "2024-07-01",
+      "datePrecision": "day",
+      "title": "ASFI incorpora activos virtuales al Reglamento de IEP",
+      "institution": "ASFI",
+      "category": "ASFI",
+      "summary": "La modificación del Reglamento de Instrumentos Electrónicos de Pago incorpora operaciones con activos virtuales 'a riesgo del consumidor'. La Circular 10881/2024 exige reportar flujos de compra vía Asfinet.",
+      "implications": "Los bancos habilitan operaciones pero el riesgo queda en el cliente; se inaugura el reporte regulatorio de flujos cripto.",
+      "sourceName": "Internet Bolivia — Activos virtuales, un año después",
+      "sourceUrl": "https://internetbolivia.org/economia/activos-virtuales-en-bolivia-un-ano-despues/"
+    },
+    {
+      "date": "2024-09-26",
+      "datePrecision": "day",
+      "title": "BCB reporta crecimiento de operaciones con activos virtuales",
+      "institution": "BCB",
+      "category": "BCB",
+      "summary": "Comunicado CP50/2024: el BCB publica cifras del crecimiento de operaciones con activos virtuales tras la habilitación de junio.",
+      "implications": "Primera medición oficial del volumen del mercado formal boliviano de activos virtuales.",
+      "sourceName": "BCB — Comunicado CP50/2024",
+      "sourceUrl": "https://www.bcb.gob.bo/webdocs/files_noticias/26sep24%20CP50%20ACTIVOS%20VIRTUALES.PDF"
+    },
+    {
+      "date": "2025-01-01",
+      "datePrecision": "year",
+      "title": "UIF crea el registro de PSAV (Resolución 19/2025)",
+      "institution": "UIF",
+      "category": "PSAV",
+      "summary": "La Resolución 19/2025 de la UIF establece el registro obligatorio de Proveedores de Servicios de Activos Virtuales.",
+      "implications": "Los exchanges y proveedores que operan con residentes bolivianos entran al perímetro AML/CFT local.",
+      "sourceName": "Internet Bolivia — Activos virtuales, un año después",
+      "sourceUrl": "https://internetbolivia.org/economia/activos-virtuales-en-bolivia-un-ano-despues/"
+    },
+    {
+      "date": "2025-01-01",
+      "datePrecision": "year",
+      "title": "Marco fintech: D.S. 5384/2025 y Circular ASFI 885/2025",
+      "institution": "Ministerio de Economía / ASFI",
+      "category": "Normativa",
+      "summary": "El Decreto Supremo 5384/2025 crea el marco de Empresas de Tecnología Financiera; ASFI lo instrumenta con la Circular 885/2025.",
+      "implications": "Base legal para fintechs locales, incluyendo modelos que integren activos virtuales.",
+      "sourceName": "Internet Bolivia — Activos virtuales, un año después",
+      "sourceUrl": "https://internetbolivia.org/economia/activos-virtuales-en-bolivia-un-ano-despues/"
+    },
+    {
+      "date": "2025-01-01",
+      "datePrecision": "year",
+      "title": "PGE 2025 permite uso contingente de activos virtuales por entidades públicas",
+      "institution": "Ministerio de Economía",
+      "category": "Normativa",
+      "summary": "El Presupuesto General del Estado 2025 habilita el uso contingente de activos virtuales — incluido USDT — por entidades públicas para obligaciones en moneda extranjera.",
+      "implications": "Reconocimiento estatal del rol de las stablecoins como vía de pago externo ante la escasez de divisas.",
+      "sourceName": "Internet Bolivia — Activos virtuales, un año después",
+      "sourceUrl": "https://internetbolivia.org/economia/activos-virtuales-en-bolivia-un-ano-despues/"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "_comment": "Alianzas institucionales — datos curados y verificados con fuente. Editar para agregar. Solo entradas con fuente verificable.",
+  "partnerships": [
+    {
+      "companyA": "BlackRock",
+      "companyB": "Securitize",
+      "date": "2024-03",
+      "blockchain": "Ethereum (+7 redes)",
+      "useCase": "BUIDL — fondo de treasuries tokenizado (agente de transferencia: Securitize). ~$2.48B AUM a mediados de 2026.",
+      "status": "Activo",
+      "sourceName": "Everstake — Blockchain-Based Funds 2026",
+      "sourceUrl": "https://everstake.one/resources/blog/blockchain-based-funds-tokenized-money-market-index"
+    },
+    {
+      "companyA": "Franklin Templeton",
+      "companyB": "Ondo Finance",
+      "date": "2026-03",
+      "blockchain": "Multichain",
+      "useCase": "Lanzamiento conjunto anunciado de un ETF tokenizado.",
+      "status": "Anunciado",
+      "sourceName": "Gate Research — RWA market analysis",
+      "sourceUrl": "https://miniapp.gate.com/blog/102069/rwa-market-triopoly-blackrock-buidl-ondo-franklin-templeton-tokenized-us-treasury-market-real-world-assets-rwa-competition-onchain-treasuries-institutional-adoption-analysis"
+    },
+    {
+      "companyA": "21Shares",
+      "companyB": "Ondo Finance",
+      "date": "2026-03",
+      "blockchain": "—",
+      "useCase": "Solicitud de ETF spot de ONDO presentada ante la SEC.",
+      "status": "En trámite",
+      "sourceName": "Gate Research — RWA market analysis",
+      "sourceUrl": "https://miniapp.gate.com/blog/102069/rwa-market-triopoly-blackrock-buidl-ondo-franklin-templeton-tokenized-us-treasury-market-real-world-assets-rwa-competition-onchain-treasuries-institutional-adoption-analysis"
+    },
+    {
+      "companyA": "JPMorgan",
+      "companyB": "—",
+      "date": "2025-12",
+      "blockchain": "Permissioned / institucional",
+      "useCase": "Fondos de money market tokenizados: MONY (dic. 2025) y JLTXX (may. 2026).",
+      "status": "Activo",
+      "sourceName": "Stablecoin Insider — Top tokenized treasury funds 2026",
+      "sourceUrl": "https://stablecoininsider.org/top-10-tokenized-treasury-funds-in-2026-buidl-benji-and-the-highest-yielding-on-chain-options/"
+    }
+  ]
+}

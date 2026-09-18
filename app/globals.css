@@ -1,0 +1,1529 @@
+@import "tailwindcss";
+
+@theme {
+  /* Identidad Blockfinity — terminal institucional (tema oscuro único) */
+  --color-midnight: #0c1d2d;
+  --color-electric: #2f66ff;
+  --color-core: #3461c6;
+  --color-steel: #8e9ba5;
+
+  /* Superficies */
+  --color-surface: #0e1113;
+  --color-card: #14171b;
+  --color-card-raised: #1a1e21;
+  --color-line: #262a2b;
+  --color-ice: #222628; /* skeletons y fondos sutiles */
+
+  /* Tinta */
+  --color-ink: #e8edf2;
+  --color-ink-secondary: #9fb0be;
+  --color-ink-muted: #64748b;
+
+  /* Dorado institucional — reservado a lo propietario de Blockfinity:
+     índices, tokenización, insights premium. NUNCA como serie de gráfico.
+     Contraste 7.43:1 sobre la ficha: apto para texto, no solo para adornos. */
+  --color-gold: #c9a227;
+  --color-gold-bright: #e0b64f;
+
+  /* Registro premium: superficie MÁS PROFUNDA que la ficha. Con la base ya
+     neutra, lo propietario se distingue por profundidad y filete dorado, no
+     por tinte. */
+  --color-charcoal: #0f1214;
+  --color-charcoal-raised: #171a1d;
+  --color-charcoal-line: #2b2f31;
+
+  /* Status (siempre con signo o etiqueta, nunca color solo) */
+  --color-up: #16c784;
+  --color-down: #ea3943;
+  --color-warn: #f59e0b;
+
+  /* Pilas locales: el build no depende de descargar fuentes de terceros. */
+  --font-display: "Aptos Display", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Aptos", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+}
+
+::selection {
+  background: rgba(201, 162, 39, 0.32);
+}
+
+/* scrollbars discretos, estética terminal */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #2e3234 transparent;
+}
+
+/* Foco visible solo para teclado: la navegación con Tab tiene que verse
+   sin ensuciar el clic con el mouse. */
+:focus-visible {
+  outline: 2px solid var(--color-electric);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Enlaces externos de las cards: transición suave al hover */
+a {
+  transition: color 120ms ease;
+}
+
+/* ============================================================
+   Capa de diseño — lenguaje visual del terminal
+   Clases planas con prefijo bf- : conviven con Tailwind sin
+   depender de su API de utilidades personalizadas.
+   ============================================================ */
+
+/* --- Corte diagonal (chaflán) -------------------------------
+   La marca formal del terminal. Una esquina cortada lee como
+   instrumento técnico sin agregar adorno. */
+.bf-cut {
+  --bf-cut: 18px;
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--bf-cut)) 0,
+    100% var(--bf-cut),
+    100% 100%,
+    0 100%
+  );
+}
+
+/* Panel cortado CON borde: clip-path recorta también el borde, así que
+   la línea se consigue con dos capas — la exterior es la línea. */
+.bf-frame {
+  --bf-cut: 18px;
+  background: var(--color-line);
+  padding: 1px;
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--bf-cut)) 0,
+    100% var(--bf-cut),
+    100% 100%,
+    0 100%
+  );
+}
+.bf-frame > * {
+  --bf-cut: 17px;
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--bf-cut)) 0,
+    100% var(--bf-cut),
+    100% 100%,
+    0 100%
+  );
+}
+
+/* --- Retícula técnica de fondo ------------------------------ */
+.bf-grid-bg {
+  background-image:
+    linear-gradient(to right, rgba(232, 237, 242, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(232, 237, 242, 0.035) 1px, transparent 1px);
+  background-size: 34px 34px;
+}
+
+/* --- Trama diagonal: estados excluidos o sin dato ----------- */
+.bf-hatch {
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent 0 4px,
+    rgba(100, 116, 139, 0.16) 4px 5px
+  );
+}
+
+/* --- Acento diagonal para títulos de sección --------------- */
+.bf-slash {
+  display: inline-block;
+  width: 3px;
+  height: 0.85em;
+  background: var(--color-electric);
+  transform: skewX(-18deg);
+}
+
+/* Variante dorada: marca lo que es propiedad intelectual de Blockfinity */
+.bf-slash-gold {
+  background: var(--color-gold);
+}
+
+/* Bloque premium: superficie neutra + filete dorado. El registro que
+   distingue lo propietario de los datos de terceros. */
+.bf-premium {
+  background: var(--color-charcoal);
+  border-top: 2px solid var(--color-gold);
+}
+.bf-premium-frame {
+  background: var(--color-charcoal-line);
+}
+.bf-premium-frame > * {
+  background: var(--color-charcoal);
+}
+
+/* --- Animaciones -------------------------------------------
+   Todas se apagan con prefers-reduced-motion (ver abajo). */
+@keyframes bf-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.bf-reveal {
+  animation: bf-reveal 400ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
+  animation-delay: calc(var(--bf-i, 0) * 55ms);
+}
+
+/* Trazo que se dibuja: la línea entra recorriendo su propia longitud */
+@keyframes bf-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.bf-draw {
+  stroke-dasharray: var(--bf-len, 400);
+  stroke-dashoffset: var(--bf-len, 400);
+  animation: bf-draw 1000ms cubic-bezier(0.25, 0.6, 0.25, 1) forwards;
+}
+
+/* Barra que crece desde su base */
+@keyframes bf-grow-x {
+  from {
+    transform: scaleX(0);
+  }
+}
+.bf-grow-x {
+  transform-origin: left center;
+  animation: bf-grow-x 620ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
+  animation-delay: calc(var(--bf-i, 0) * 45ms);
+}
+
+@keyframes bf-grow-y {
+  from {
+    transform: scaleY(0);
+  }
+}
+.bf-grow-y {
+  transform-origin: bottom center;
+  animation: bf-grow-y 620ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
+  animation-delay: calc(var(--bf-i, 0) * 45ms);
+}
+
+/* Skeleton con barrido: menos ansioso que un pulse plano */
+@keyframes bf-shimmer {
+  to {
+    background-position: 200% 0;
+  }
+}
+.bf-shimmer {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-ice) 40%,
+    var(--color-card-raised) 50%,
+    var(--color-ice) 60%
+  );
+  background-size: 200% 100%;
+  animation: bf-shimmer 1500ms linear infinite;
+}
+
+/* --- Cifras: los números de datos siempre alineados --------- */
+.tabular-nums,
+[class*="tabular-nums"] {
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Respeto por la preferencia de movimiento reducido ------ */
+@media (prefers-reduced-motion: reduce) {
+  .bf-reveal,
+  .bf-grow-x,
+  .bf-grow-y,
+  .bf-shimmer {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
+  .bf-draw {
+    animation: none !important;
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ============================================================
+   Informe descargable — Blockchain Landscape Report (BBIM §3, Fase 4)
+   Mismo lenguaje visual que el guion ejecutivo: rótulos mono con
+   tracking ancho, filetes finos, acento dorado, cifras tabulares y
+   un riel numerado a la izquierda de cada capa.
+
+   Documento editorial sobre papel blanco, tanto en pantalla como en PDF.
+   Las secciones usan el ancho completo para conservar la escala de gráficos.
+   ============================================================ */
+.bf-rp {
+  --rp-ground: #ffffff;
+  --rp-panel: #ffffff;
+  --rp-raised: #f2f4f5;
+  --rp-line: #cdd3d9;
+  --rp-line-soft: #e1e5e9;
+  --rp-gold: #8a6d12;
+  --rp-gold-bright: #6f570d;
+  --rp-ink: #18232e;
+  --rp-ink-2: #465360;
+  --rp-ink-3: #596875;
+  --rp-up: #0f7a4d;
+  --rp-down: #b31f2b;
+  --rp-warn: #96620a;
+  --rp-mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
+
+  /* superficie contra la que se recortan las marcas: los huecos de 2px de una
+     barra apilada y el anillo de un punto se pintan con este color, no con un
+     borde. Cada contenedor que cambia de fondo la vuelve a declarar. */
+  --rp-surface: var(--rp-ground);
+
+  background: var(--rp-ground);
+  color-scheme: light;
+  color: var(--rp-ink);
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  box-shadow: 0 12px 48px #00000026;
+  font-size: 14px;
+  line-height: 1.65;
+  padding: 44px 48px;
+}
+
+/* --- Barra de acciones (no se imprime) ---------------------- */
+.bf-rp-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--color-line);
+  background: var(--color-card);
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+/* --- Masthead ---------------------------------------------- */
+.bf-rp-mast {
+  border-bottom: 1px solid var(--rp-line);
+  padding-bottom: 30px;
+}
+.bf-rp-brand {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  border-bottom: 2px solid var(--rp-gold);
+  padding-bottom: 24px;
+  margin-bottom: 44px;
+}
+.bf-rp-logo {
+  display: block;
+  width: 175px;
+  height: auto;
+  flex-shrink: 0;
+}
+.bf-rp-brand > span {
+  text-align: right;
+  font-size: 10px;
+  line-height: 1.6;
+  color: var(--rp-ink-3);
+}
+.bf-rp-contents-label {
+  margin-top: 32px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--rp-ink-3);
+}
+.bf-rp-cover-note {
+  margin-top: 28px;
+  font-size: 11px;
+  color: var(--rp-ink-3);
+}
+.bf-rp-eyebrow {
+  font-family: var(--rp-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--rp-gold);
+  margin: 0 0 10px;
+}
+.bf-rp-mast h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(32px, 4.4vw, 48px);
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  margin: 0;
+  text-wrap: balance;
+}
+.bf-rp-mast h1 em {
+  display: block;
+  font-style: normal;
+  color: var(--rp-gold-bright);
+}
+.bf-rp-thesis {
+  margin: 22px 0 0;
+  max-width: 68ch;
+  font-size: 15px;
+  color: var(--rp-ink-2);
+}
+
+/* --- Fila de metadatos -------------------------------------- */
+.bf-rp-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px 24px;
+  margin: 28px 0 0;
+  border-top: 1px solid var(--rp-line-soft);
+  padding-top: 20px;
+}
+.bf-rp-meta > div {
+  min-width: 0;
+}
+.bf-rp-meta > div:last-child {
+  border-right: 0;
+  margin-right: 0;
+  padding-right: 0;
+}
+.bf-rp-meta dt {
+  font-family: var(--rp-mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--rp-ink-3);
+  margin: 0 0 2px;
+}
+.bf-rp-meta dd {
+  margin: 0;
+  font-family: var(--rp-mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--rp-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Secciones con riel numerado ---------------------------- */
+.bf-rp-sect {
+  border-top: 1px solid var(--rp-line);
+  padding: 32px 0 24px;
+  scroll-margin-top: 24px;
+}
+.bf-rp-section-head {
+  display: grid;
+  grid-template-columns: 82px minmax(0, 1fr);
+  gap: 22px;
+  margin-bottom: 22px;
+}
+.bf-rp-section-intro {
+  min-width: 0;
+}
+.bf-rp-sect:first-of-type {
+  border-top: 2px solid var(--rp-gold);
+}
+.bf-rp-cue {
+  align-self: start;
+}
+.bf-rp-code {
+  font-family: var(--rp-mono);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--rp-gold);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.bf-rp-layer {
+  margin-top: 6px;
+  font-family: var(--rp-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--rp-ink-3);
+  line-height: 1.45;
+}
+.bf-rp-tick {
+  margin-top: 8px;
+  width: 28px;
+  height: 2px;
+  background: var(--rp-gold);
+  opacity: 0.6;
+}
+.bf-rp-body {
+  min-width: 0;
+}
+.bf-rp-section-head h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 25px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin: 0 0 6px;
+  color: var(--rp-ink);
+}
+.bf-rp-body h3 {
+  font-family: var(--rp-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--rp-ink-3);
+  margin: 20px 0 8px;
+}
+.bf-rp-body p {
+  margin: 0 0 12px;
+  max-width: 74ch;
+  color: var(--rp-ink-2);
+}
+.bf-rp-lead {
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--rp-ink-2);
+}
+
+/* --- Rejilla de cifras -------------------------------------- */
+/* El borde va en cada celda, no en el contenedor: con 5 u 8 cifras la última
+   fila queda incompleta, y un contenedor con fondo dejaba a la vista un
+   rectángulo vacío que se lee como un dato que faltó cargar. */
+.bf-rp-figs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 20px 0;
+}
+.bf-rp-fig {
+  background: var(--rp-panel);
+  padding: 16px 14px;
+  border: 1px solid var(--rp-line-soft);
+  min-width: 0;
+}
+.bf-rp-fig b {
+  display: block;
+  font-family: var(--rp-mono);
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+  color: var(--rp-gold-bright);
+  font-variant-numeric: tabular-nums;
+}
+.bf-rp-fig span {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  line-height: 1.35;
+  color: var(--rp-ink-2);
+}
+.bf-rp-fig small {
+  display: block;
+  margin-top: 2px;
+  font-size: 10px;
+  line-height: 1.35;
+  color: var(--rp-ink-3);
+}
+
+/* --- Tablas ------------------------------------------------- */
+.bf-rp-table {
+  border: 1px solid var(--rp-line-soft);
+  margin: 12px 0 4px;
+  overflow-x: auto;
+}
+.bf-rp-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.bf-rp-table thead th {
+  background: var(--rp-raised);
+  font-family: var(--rp-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--rp-ink-3);
+  text-align: left;
+  padding: 8px 11px;
+  border-bottom: 1px solid var(--rp-line);
+  white-space: nowrap;
+}
+.bf-rp-table thead th.n {
+  text-align: right;
+}
+.bf-rp-table tbody td {
+  padding: 7px 11px;
+  border-bottom: 1px solid var(--rp-line-soft);
+  color: var(--rp-ink-2);
+  vertical-align: top;
+}
+.bf-rp-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+.bf-rp-table td.k {
+  color: var(--rp-ink);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.bf-rp-table td.n,
+.bf-rp-table th.n {
+  font-family: var(--rp-mono);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+.bf-rp-up {
+  color: var(--rp-up);
+}
+.bf-rp-down {
+  color: var(--rp-down);
+}
+.bf-rp-muted {
+  color: var(--rp-ink-3);
+}
+
+/* --- Notas laterales ---------------------------------------- */
+.bf-rp-note {
+  background: var(--rp-panel);
+  border: 1px solid var(--rp-line-soft);
+  border-left: 2px solid var(--rp-line);
+  padding: 12px 15px;
+  margin: 16px 0;
+}
+.bf-rp-note h4 {
+  font-family: var(--rp-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rp-ink-3);
+  margin: 0 0 7px;
+}
+.bf-rp-note p {
+  font-size: 12px;
+  margin: 0 0 8px;
+  color: var(--rp-ink-2);
+  max-width: none;
+}
+.bf-rp-note p:last-child {
+  margin-bottom: 0;
+}
+.bf-rp-note--warn {
+  border-left-color: var(--rp-warn);
+}
+.bf-rp-note--warn h4 {
+  color: var(--rp-warn);
+}
+.bf-rp-note--gold {
+  border-left-color: var(--rp-gold);
+}
+.bf-rp-note--gold h4 {
+  color: var(--rp-gold);
+}
+
+/* --- Listas de señales numeradas ---------------------------- */
+.bf-rp-list {
+  list-style: none;
+  counter-reset: bf-rp-step;
+  margin: 8px 0 0;
+  padding: 0;
+}
+.bf-rp-list li {
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  gap: 10px;
+  padding: 9px 0;
+  border-top: 1px solid var(--rp-line-soft);
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--rp-ink-2);
+}
+.bf-rp-list li:last-child {
+  border-bottom: 1px solid var(--rp-line-soft);
+}
+.bf-rp-list li::before {
+  content: counter(bf-rp-step, decimal-leading-zero);
+  counter-increment: bf-rp-step;
+  font-family: var(--rp-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--rp-gold);
+}
+
+/* --- Pie del informe ---------------------------------------- */
+.bf-rp-foot {
+  border-top: 1px solid var(--rp-line);
+  margin-top: 24px;
+  padding-top: 14px;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--rp-ink-3);
+}
+.bf-rp-foot-brand {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.bf-rp-foot-brand .bf-rp-logo {
+  width: 132px;
+}
+
+/* --- Gráficos --------------------------------------------------
+   El informe se lee en gráficos; las tablas quedaron para lo que exige
+   precisión fila por fila. Todo es SVG con viewBox y ancho 100%: se
+   imprime al tamaño real de la caja sin depender de una medición en el
+   cliente, que en el layout de impresión llega a dar cero.
+
+   Las marcas llevan color; el texto NUNCA lo lleva. Rótulos, valores y
+   ejes usan tintas oscuras para mantener el contraste sobre blanco.      */
+
+.bf-rp-chart {
+  --rp-surface: var(--rp-panel);
+  background: var(--rp-panel);
+  border: 1px solid var(--rp-line-soft);
+  margin: 16px 0;
+  padding: 16px;
+  min-width: 0;
+}
+.bf-rp-chart figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  margin-bottom: 10px;
+}
+.bf-rp-chart-t {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--rp-ink);
+}
+.bf-rp-chart-n {
+  display: block;
+  width: 100%;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--rp-ink-3);
+}
+
+.bf-rp-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* Cromo: hairline sólido, un paso por encima de la superficie. Nunca
+   punteado — el punteado se lee como umbral o proyección. */
+.bf-rp-grid {
+  stroke: var(--rp-line-soft);
+  stroke-width: 1;
+  fill: none;
+}
+.bf-rp-axis {
+  stroke: var(--rp-line);
+  stroke-width: 1;
+  fill: none;
+}
+.bf-rp-spine {
+  stroke: var(--rp-line);
+  stroke-width: 1.5;
+}
+
+/* Tintas del SVG: los tres niveles del documento, en unidades de viewBox */
+.bf-rp-ax {
+  font-family: var(--rp-mono);
+  font-size: 9px;
+  fill: var(--rp-ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.bf-rp-lab {
+  font-size: 10px;
+  fill: var(--rp-ink-2);
+}
+.bf-rp-val {
+  font-family: var(--rp-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  fill: var(--rp-ink);
+  font-variant-numeric: tabular-nums;
+}
+.bf-rp-center {
+  font-family: var(--rp-mono);
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  fill: var(--rp-ink);
+}
+.bf-rp-center-s {
+  font-family: var(--rp-mono);
+  font-size: 13px;
+  font-weight: 600;
+  fill: var(--rp-ink);
+}
+.bf-rp-cellnum {
+  font-family: var(--rp-mono);
+  font-size: 10px;
+  font-weight: 600;
+  fill: var(--rp-ink);
+}
+/* Rótulo dentro de una marca de color: el relleno decide blanco o tinta
+   (ver inkOn en ReportCharts), acá solo va la forma tipográfica. */
+.bf-rp-inbar {
+  font-family: var(--rp-mono);
+  font-size: 10px;
+  font-weight: 600;
+}
+.bf-rp-inbar--2 {
+  font-weight: 500;
+  opacity: 0.82;
+}
+
+.bf-rp-quad {
+  fill: var(--rp-line-soft);
+  fill-opacity: 0.4;
+}
+.bf-rp-quad-l {
+  font-family: var(--rp-mono);
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  fill: var(--rp-ink-3);
+}
+.bf-rp-needle {
+  stroke: var(--rp-ink);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.bf-rp-needle-hub {
+  fill: var(--rp-ink);
+}
+.bf-rp-cell-empty {
+  fill: var(--rp-line-soft);
+  fill-opacity: 0.45;
+}
+.bf-rp-node {
+  fill: var(--rp-gold);
+}
+.bf-rp-node-t {
+  font-family: var(--rp-mono);
+  font-size: 9px;
+  font-weight: 700;
+  fill: var(--rp-ground);
+}
+.bf-rp-band {
+  fill: var(--rp-raised);
+}
+.bf-rp-spark {
+  display: block;
+  overflow: visible;
+}
+
+/* --- Leyendas --------------------------------------------------
+   Presentes siempre que haya dos o más series: la identidad no puede
+   depender de emparejar colores de memoria.                            */
+.bf-rp-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  list-style: none;
+  margin: 9px 0 0;
+  padding: 0;
+}
+.bf-rp-legend--col {
+  flex-direction: column;
+  gap: 5px;
+}
+.bf-rp-legend li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10.5px;
+  line-height: 1.3;
+  color: var(--rp-ink-2);
+  min-width: 0;
+}
+.bf-rp-legend-l {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.bf-rp-legend b {
+  font-family: var(--rp-mono);
+  font-weight: 600;
+  color: var(--rp-ink);
+  font-variant-numeric: tabular-nums;
+  margin-left: auto;
+  padding-left: 6px;
+}
+.bf-rp-key {
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+}
+.bf-rp-key--line {
+  height: 3px;
+  border-radius: 2px;
+}
+.bf-rp-key--dot {
+  border-radius: 50%;
+}
+
+/* --- Mapa de calor de scores -----------------------------------
+   Reemplaza el scorecard de nueve columnas. El número va impreso en la
+   celda: el color acompaña la lectura, nunca la sustituye.             */
+.bf-rp-matrix {
+  border: 1px solid var(--rp-line-soft);
+  margin: 12px 0 4px;
+  overflow-x: auto;
+}
+.bf-rp-matrix-h,
+.bf-rp-matrix-r {
+  display: grid;
+  grid-template-columns: minmax(96px, 1.35fr) 46px repeat(var(--cols), minmax(38px, 1fr));
+  gap: 2px;
+  align-items: stretch;
+}
+.bf-rp-matrix-h {
+  background: var(--rp-raised);
+  border-bottom: 1px solid var(--rp-line);
+  padding: 0 2px;
+}
+.bf-rp-matrix-h span {
+  font-family: var(--rp-mono);
+  font-size: 8.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--rp-ink-3);
+  padding: 6px 3px;
+  text-align: center;
+}
+.bf-rp-matrix-h span:first-child {
+  text-align: left;
+}
+.bf-rp-matrix-r {
+  padding: 2px;
+}
+.bf-rp-matrix-n {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--rp-ink);
+  padding-left: 5px;
+  min-width: 0;
+}
+.bf-rp-matrix-n em {
+  font-style: normal;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* la marca de índice parcial: nunca se recorta con el nombre */
+.bf-rp-matrix-n s {
+  flex: none;
+  text-decoration: none;
+  color: var(--rp-gold);
+}
+.bf-rp-matrix-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--rp-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--rp-gold-bright);
+  font-variant-numeric: tabular-nums;
+}
+.bf-rp-matrix-h .bf-rp-matrix-badge {
+  color: var(--rp-ink-3);
+}
+.bf-rp-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 21px;
+  border-radius: 2px;
+  font-family: var(--rp-mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--rp-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Índice visual de la portada -------------------------------- */
+.bf-rp-toc {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 28px;
+  margin-top: 12px;
+}
+.bf-rp-toc > a {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  border-bottom: 1px solid var(--rp-line-soft);
+  padding: 12px 0;
+  text-decoration: none;
+}
+.bf-rp-toc > a:hover span {
+  color: var(--rp-gold);
+}
+.bf-rp-toc > a:focus-visible {
+  outline: 2px solid var(--rp-gold);
+  outline-offset: 3px;
+}
+.bf-rp-toc b {
+  display: block;
+  font-family: var(--rp-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--rp-gold);
+  font-variant-numeric: tabular-nums;
+}
+.bf-rp-toc span {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--rp-ink-2);
+}
+
+/* --- Tarjetas de índice propietario ----------------------------- */
+.bf-rp-ix {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+.bf-rp-ix > article {
+  background: var(--rp-panel);
+  border: 1px solid var(--rp-line-soft);
+  padding: 16px;
+  min-width: 0;
+}
+.bf-rp-ix-h {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-family: var(--rp-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--rp-ink-3);
+}
+.bf-rp-ix-n {
+  display: block;
+  margin: 5px 0 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--rp-ink);
+}
+.bf-rp-ix-v {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+}
+.bf-rp-ix-v b {
+  font-family: var(--rp-mono);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--rp-gold-bright);
+  font-variant-numeric: tabular-nums;
+}
+.bf-rp-ix-f {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 7px;
+  border-top: 1px solid var(--rp-line-soft);
+  padding-top: 6px;
+  font-size: 10px;
+  color: var(--rp-ink-3);
+}
+.bf-rp-ix-f b {
+  font-family: var(--rp-mono);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Fichas breves (jurisdicciones, etiquetas) ------------------- */
+.bf-rp-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 9px 0 2px;
+}
+.bf-rp-chips span {
+  border: 1px solid var(--rp-line-soft);
+  background: var(--rp-panel);
+  padding: 2px 7px;
+  font-size: 10px;
+  color: var(--rp-ink-2);
+}
+.bf-rp-chips span i {
+  font-style: normal;
+  color: var(--rp-ink-3);
+}
+
+/* --- Cifra con tendencia ---------------------------------------- */
+.bf-rp-fig-s {
+  margin-top: 6px;
+}
+
+/* --- Rejillas de gráficos --------------------------------------- */
+.bf-rp-duo,
+.bf-rp-trio {
+  display: grid;
+  gap: 0 12px;
+  align-items: start;
+}
+.bf-rp-duo {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.bf-rp-trio {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.bf-rp-duo--aside {
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+}
+.bf-rp-center-x {
+  display: flex;
+  justify-content: center;
+}
+.bf-rp-center-x > svg {
+  max-width: 210px;
+}
+
+@media screen and (max-width: 700px) {
+  .bf-rp {
+    padding: 26px 20px;
+  }
+  .bf-rp-brand {
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+  }
+  .bf-rp-brand > span {
+    text-align: left;
+  }
+  .bf-rp-section-head {
+    grid-template-columns: 58px minmax(0, 1fr);
+    gap: 14px;
+  }
+  .bf-rp-figs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .bf-rp-toc,
+  .bf-rp-ix {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .bf-rp-duo,
+  .bf-rp-trio,
+  .bf-rp-duo--aside {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* --- Impresión ---------------------------------------------- */
+@page {
+  size: A4;
+  margin: 16mm 16mm 22mm;
+  @bottom-left { content: url("/report-footer.svg"); vertical-align: middle; }
+  @bottom-right {
+    content: counter(page);
+    font-family: Arial, sans-serif;
+    font-size: 8pt;
+    color: #596875;
+  }
+}
+@page :first {
+  @bottom-right { content: none; }
+}
+
+@media print {
+  .bf-noprint,
+  aside {
+    display: none !important;
+  }
+  html,
+  body {
+    background: #fff !important;
+  }
+  main {
+    padding: 0 !important;
+  }
+  body > div,
+  main > div {
+    display: block !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+  }
+  main > .bf-noprint {
+    display: none !important;
+  }
+  .bf-rp {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    background: #fff !important;
+    box-shadow: none;
+    max-width: none;
+    margin: 0;
+    font-size: 9.5pt;
+    line-height: 1.5;
+    padding: 0;
+  }
+  .bf-rp-sect {
+    break-inside: auto;
+    padding: 0 0 12px;
+    border-top: 0;
+  }
+  .bf-rp-sect:first-of-type {
+    border-top: 0;
+  }
+  .bf-rp-section-head {
+    break-inside: avoid;
+    break-after: avoid;
+    border-top: 2px solid var(--rp-gold);
+    padding-top: 16px;
+    margin-bottom: 18px;
+  }
+  .bf-rp-mast {
+    break-after: page;
+    min-height: 245mm;
+    display: flex;
+    flex-direction: column;
+    border: 0;
+    padding-bottom: 0;
+  }
+  .bf-rp-brand {
+    margin-bottom: 18mm;
+  }
+  .bf-rp-cover-note {
+    margin-top: auto;
+    padding-top: 24px;
+  }
+  .bf-rp p,
+  .bf-rp-list li {
+    orphans: 3;
+    widows: 3;
+  }
+  .bf-rp h3 {
+    break-after: avoid;
+  }
+  .bf-rp-code {
+    font-size: 15pt;
+  }
+  .bf-rp-table {
+    overflow: visible;
+    break-inside: auto;
+  }
+  .bf-rp-table table {
+    font-size: 7.6pt;
+  }
+  .bf-rp-table thead th,
+  .bf-rp-table tbody td {
+    padding: 4px 6px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  .bf-rp-pagebreak,
+  #informe-06 {
+    break-before: page;
+  }
+  .bf-rp-figs,
+  .bf-rp-note,
+  .bf-rp-chart,
+  .bf-rp-matrix,
+  .bf-rp-ix > article,
+  .bf-rp-toc {
+    break-inside: avoid;
+  }
+  /* En A4 el cuerpo del informe mide ~640px, que es la medida con la que se
+     eligieron los viewBox: el texto de los SVG sale al cuerpo previsto sin
+     tocar nada. Solo se ajusta el aire alrededor. */
+  .bf-rp-chart {
+    margin: 12px 0;
+    padding: 12px;
+  }
+  .bf-rp-duo,
+  .bf-rp-trio,
+  .bf-rp-duo--aside {
+    gap: 0 9px;
+  }
+  .bf-rp-matrix {
+    overflow: visible;
+  }
+  .bf-rp-table thead {
+    display: table-header-group;
+  }
+  .bf-rp-table tbody tr {
+    break-inside: avoid;
+  }
+  .bf-rp-mast h1 {
+    font-size: 34pt;
+  }
+  .bf-rp-section-head h2 {
+    font-size: 18pt;
+  }
+  .bf-rp-fig b {
+    font-size: 14pt;
+  }
+  .bf-rp-foot {
+    break-inside: avoid;
+  }
+  .bf-rp a {
+    text-decoration: none;
+    color: inherit;
+  }
+}
+
+/* ============================================================
+   NEXUM Intelligence Layer — capa educativa
+   Pantalla fija: el aula no scrollea como página, cada columna
+   scrollea por dentro. Las animaciones acá SÍ son contenido —
+   un esquema que se dibuja explica mejor que uno estático — pero
+   todas se apagan con prefers-reduced-motion.
+   ============================================================ */
+
+/* Entrada de un nodo del esquema: aparece con escala, en cadena */
+@keyframes nx-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.86);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.nx-pop {
+  transform-origin: center;
+  animation: nx-pop 380ms cubic-bezier(0.2, 0.8, 0.3, 1.1) both;
+  animation-delay: calc(var(--nx-i, 0) * 90ms);
+}
+
+/* Flujo que recorre una arista: la línea punteada avanza sola */
+@keyframes nx-march {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+.nx-march {
+  stroke-dasharray: 4 8;
+  animation: nx-march 900ms linear infinite;
+}
+
+/* Barrido de luz sobre la cabecera del aula */
+@keyframes nx-scan {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(220%);
+  }
+}
+.nx-scan {
+  animation: nx-scan 5.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* Respuesta correcta: anillo que se expande y se apaga */
+@keyframes nx-ring {
+  from {
+    box-shadow: 0 0 0 0 rgba(22, 199, 132, 0.55);
+  }
+  to {
+    box-shadow: 0 0 0 14px rgba(22, 199, 132, 0);
+  }
+}
+.nx-ring {
+  animation: nx-ring 700ms ease-out 2;
+}
+
+/* Respuesta incorrecta: negación breve, sin dramatismo */
+@keyframes nx-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-5px);
+  }
+  40% {
+    transform: translateX(5px);
+  }
+  60% {
+    transform: translateX(-3px);
+  }
+  80% {
+    transform: translateX(3px);
+  }
+}
+.nx-shake {
+  animation: nx-shake 340ms ease-in-out;
+}
+
+/* Cambio de módulo o de pestaña: el contenido entra desde la derecha */
+@keyframes nx-enter {
+  from {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.nx-enter {
+  animation: nx-enter 340ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
+  animation-delay: calc(var(--nx-i, 0) * 60ms);
+}
+
+/* Latido del punto que marca un hotspot sin abrir */
+@keyframes nx-beacon {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(47, 102, 255, 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(47, 102, 255, 0);
+  }
+}
+.nx-beacon {
+  animation: nx-beacon 2.2s ease-out infinite;
+}
+
+/* Aguja del medidor: transición larga para que se vea moverse */
+.nx-needle {
+  transition: transform 900ms cubic-bezier(0.2, 0.8, 0.25, 1);
+}
+
+/* Arco del donut y anillo de progreso: se dibujan al entrar */
+.nx-arc {
+  transition: stroke-dashoffset 900ms cubic-bezier(0.2, 0.8, 0.25, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nx-pop,
+  .nx-march,
+  .nx-scan,
+  .nx-ring,
+  .nx-shake,
+  .nx-enter,
+  .nx-beacon {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
+  .nx-needle,
+  .nx-arc {
+    transition: none !important;
+  }
+}
+
+/* Informe: fichas técnicas y marca repetida dentro del margen de impresión. */
+.bf-rp-cell-note { display: block; font-size: 8px; font-weight: 400; color: #586572; margin-top: 3px; overflow-wrap: anywhere; }
+.bf-rp-network-card { border: 1px solid #dce1e5; border-top: 3px solid #b08837; padding: 16px 18px; margin: 18px 0; break-inside: avoid; }
+.bf-rp-network-card h4 { margin: 0 0 12px; font-size: 14px; }
+.bf-rp-network-card h4 span { display: block; color: #586572; font-size: 10px; font-weight: 400; margin-top: 4px; }
+
+/* Fichas técnicas compactas del Builder Radar: tres por fila, solo los datos que la red documenta */
+.bf-rp-netcards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 10px 0 18px; }
+.bf-rp-netcard { border: 1px solid #dce1e5; border-top: 2px solid #b08837; padding: 9px 11px; break-inside: avoid; font-size: 10.5px; line-height: 1.45; }
+.bf-rp-netcard h4 { margin: 0 0 6px; font-size: 12.5px; }
+.bf-rp-netcard h4 span { display: block; color: #586572; font-size: 9.5px; font-weight: 400; margin-top: 2px; }
+.bf-rp-netcard dl { margin: 0; }
+.bf-rp-netcard dl > div { display: flex; justify-content: space-between; gap: 8px; border-top: 1px solid #eef1f3; padding: 2px 0; }
+.bf-rp-netcard dt { color: #586572; flex-shrink: 0; }
+.bf-rp-netcard dd { margin: 0; text-align: right; }
+.bf-rp-netcard a { color: inherit; }
+
+/* Pesos por caso de uso: rótulo y barra apilada en una fila */
+.bf-rp-weights { display: grid; gap: 6px; }
+.bf-rp-weights-row { display: grid; grid-template-columns: 128px minmax(0, 1fr); gap: 10px; align-items: center; }
+.bf-rp-weights-row > span { font-size: 11px; color: #33404a; }
+
+@media print {
+  .bf-rp-netcards { gap: 6px; }
+  .bf-rp-netcard { padding: 6px 8px; }
+}
+
+@media screen and (max-width: 700px) {
+  .bf-rp-netcards { grid-template-columns: 1fr; }
+  .bf-rp-weights-row { grid-template-columns: 1fr; }
+}
+.bf-rp-network-card dl { margin: 0; }
+.bf-rp-network-card dl > div { display: grid; grid-template-columns: 106px 1fr; gap: 10px; padding: 6px 0; border-top: 1px solid #edf0f2; font-size: 10px; line-height: 1.55; }
+.bf-rp-network-card dt { font-weight: 600; }
+.bf-rp-network-card dd { margin: 0; overflow-wrap: anywhere; }
+.bf-rp-bar button:disabled { opacity: .55; cursor: wait; }
+@media (max-width: 600px) { .bf-rp-network-card dl > div { grid-template-columns: 1fr; gap: 2px; } }
+@media print {
+  .bf-rp-network-card { padding: 10px 12px; }
+  .bf-rp-network-card dl > div { grid-template-columns: 25mm 1fr; }
+  .bf-rp-table td { overflow-wrap: anywhere; }
+}
+
+/* ============================================================
+   Ficha lateral de histórico
+   Entra desde la derecha; el velo se funde. Sin movimiento con
+   prefers-reduced-motion.
+   ============================================================ */
+@keyframes bf-drawer-in {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.bf-drawer-in {
+  animation: bf-drawer-in 220ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+
+@keyframes bf-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.bf-fade-in {
+  animation: bf-fade-in 180ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bf-drawer-in,
+  .bf-fade-in {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
+}

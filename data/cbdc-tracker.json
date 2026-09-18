@@ -1,0 +1,311 @@
+{
+  "_comment": "Tracker CBDC y marcos regulatorios — SNAPSHOT CURADO, no dato en vivo. Cada fila lleva asOf y sourceUrl propio, verificado contra la fuente primaria el 2026-08-26. El estado de un proyecto CBDC cambia rápido: revisar antes de citar. status: Lanzado | Piloto | Desarrollo | Investigación | Descartado.",
+  "asOf": "2026-08",
+  "verifiedOn": "2026-08-26",
+  "trackerSourceName": "Atlantic Council — CBDC Tracker",
+  "trackerSourceUrl": "https://www.atlanticcouncil.org/cbdctracker/",
+  "globalContext": {
+    "exploring": 146,
+    "pilots": 41,
+    "advancedPhase": 77,
+    "note": "146 países y uniones monetarias, más del 98% del PIB global, exploran una CBDC. 41 pilotos activos y 77 países en fase avanzada de exploración.",
+    "sourceName": "Atlantic Council — CBDC Tracker",
+    "sourceUrl": "https://www.atlanticcouncil.org/cbdctracker/"
+  },
+  "jurisdictions": [
+    {
+      "jurisdiction": "Bahamas",
+      "project": "Sand Dollar",
+      "centralBank": "Central Bank of The Bahamas",
+      "status": "Lanzado",
+      "since": "2020",
+      "note": "Primera CBDC minorista del mundo en circulación general. Sigue siendo el caso de referencia de que lanzar no equivale a que la gente la use.",
+      "asOf": "2026-08",
+      "sourceName": "Atlantic Council — CBDC Tracker",
+      "sourceUrl": "https://www.atlanticcouncil.org/cbdctracker/",
+      "lat": 25.0,
+      "lon": -77.4
+    },
+    {
+      "jurisdiction": "Jamaica",
+      "project": "JAM-DEX",
+      "centralBank": "Bank of Jamaica",
+      "status": "Lanzado",
+      "since": "2022",
+      "note": "CBDC minorista con reconocimiento legal como moneda de curso legal.",
+      "asOf": "2026-08",
+      "sourceName": "Atlantic Council — CBDC Tracker",
+      "sourceUrl": "https://www.atlanticcouncil.org/cbdctracker/",
+      "lat": 18.1,
+      "lon": -77.3
+    },
+    {
+      "jurisdiction": "Nigeria",
+      "project": "eNaira",
+      "centralBank": "Central Bank of Nigeria",
+      "status": "Lanzado",
+      "since": "2021",
+      "note": "Lanzamiento temprano que permite estudiar la convivencia entre dinero público digital y stablecoins. La adopción depende de utilidad, distribución y confianza, no solo de disponibilidad tecnológica.",
+      "asOf": "2026-08",
+      "sourceName": "Atlantic Council — CBDC Tracker",
+      "sourceUrl": "https://www.atlanticcouncil.org/cbdctracker/",
+      "lat": 9.1,
+      "lon": 8.7
+    },
+    {
+      "jurisdiction": "Rusia",
+      "project": "Rublo digital",
+      "centralBank": "Banco Central de Rusia",
+      "status": "Piloto",
+      "since": "2023",
+      "note": "Sale del piloto: desde el 01/09/2026 los 11 bancos sistémicamente importantes deben ofrecer operaciones en rublo digital, junto con los comercios de más de ₽120M de facturación anual. Bancos con licencia universal se suman en 2027 y el resto en 2028. Es el despliegue obligatorio más grande del mundo.",
+      "asOf": "2026-08",
+      "sourceName": "Bank of Russia — Large-scale introduction of the digital ruble",
+      "sourceUrl": "https://cbr.ru/eng/press/event/?id=25774",
+      "lat": 55.8,
+      "lon": 37.6
+    },
+    {
+      "jurisdiction": "China",
+      "project": "e-CNY",
+      "centralBank": "People's Bank of China",
+      "status": "Piloto",
+      "since": "2019",
+      "note": "El piloto más grande del mundo por volumen y número de ciudades; sin lanzamiento nacional formal.",
+      "asOf": "2026-08",
+      "sourceName": "Atlantic Council — CBDC Tracker",
+      "sourceUrl": "https://www.atlanticcouncil.org/cbdctracker/",
+      "lat": 39.9,
+      "lon": 116.4
+    },
+    {
+      "jurisdiction": "India",
+      "project": "Digital Rupee (e₹)",
+      "centralBank": "Reserve Bank of India",
+      "status": "Piloto",
+      "since": "2022",
+      "note": "Pilotos mayorista y minorista en paralelo, con bancos comerciales como distribuidores.",
+      "asOf": "2026-08",
+      "sourceName": "Atlantic Council — CBDC Tracker",
+      "sourceUrl": "https://www.atlanticcouncil.org/cbdctracker/",
+      "lat": 28.6,
+      "lon": 77.2
+    },
+    {
+      "jurisdiction": "Brasil",
+      "project": "Drex",
+      "centralBank": "Banco Central do Brasil",
+      "status": "Piloto",
+      "since": "2023",
+      "note": "Enfoque mayorista y de tokenización de activos, más cerca de una infraestructura de liquidación que de una CBDC minorista. Es la referencia regional más cercana al diseño que eligió Bolivia.",
+      "asOf": "2026-08",
+      "sourceName": "Atlantic Council — CBDC Tracker",
+      "sourceUrl": "https://www.atlanticcouncil.org/cbdctracker/",
+      "lat": -15.8,
+      "lon": -47.9
+    },
+    {
+      "jurisdiction": "Zona euro",
+      "project": "Euro digital",
+      "centralBank": "Banco Central Europeo",
+      "status": "Piloto",
+      "since": "2021",
+      "note": "El Consejo de Gobierno cerró la fase de preparación en octubre de 2025 y pasó a la siguiente. A fines de junio de 2026 se seleccionaron 36 proveedores de pago para el piloto (entre ellos Deutsche Bank, UniCredit, Revolut, Adyen y Stripe). La fase operativa del piloto arranca en el segundo semestre de 2027 y la primera emisión posible se proyecta para 2029, condicionada a que el legislador europeo apruebe el reglamento.",
+      "asOf": "2026-08",
+      "sourceName": "BCE — Digital euro pilot",
+      "sourceUrl": "https://www.ecb.europa.eu/euro/digital_euro/pilot/html/index.en.html",
+      "lat": 50.1,
+      "lon": 8.7
+    },
+    {
+      "jurisdiction": "Reino Unido",
+      "project": "Digital pound",
+      "centralBank": "Bank of England",
+      "status": "Desarrollo",
+      "since": "2021",
+      "note": "La fase de diseño termina en 2026: el Banco y el Tesoro publicarán el blueprint, la evaluación y la decisión sobre próximos pasos antes de fin de año. Cualquier emisión requeriría legislación primaria del Parlamento.",
+      "asOf": "2026-08",
+      "sourceName": "Bank of England — Digital pound update",
+      "sourceUrl": "https://www.bankofengland.co.uk/report/2025/digital-pound-update-october",
+      "lat": 51.5,
+      "lon": -0.1
+    },
+    {
+      "jurisdiction": "Bolivia",
+      "project": "Boliviano Digital",
+      "centralBank": "BCB",
+      "status": "Desarrollo",
+      "since": "2025",
+      "note": "El BCB publicó el Primer Informe sobre el Boliviano Digital en octubre de 2025 y trazó una ruta crítica de implementación gradual. El diseño es de CBDC MAYORISTA — infraestructura de pagos y compensación entre entidades, no una moneda digital para el público. Queda pendiente un segundo informe técnico y regulatorio antes de la fase de pruebas en entorno controlado.",
+      "asOf": "2026-08",
+      "sourceName": "BCB — Ruta crítica para la implementación gradual del Boliviano Digital",
+      "sourceUrl": "https://www.bcb.gob.bo/?q=content%2Fel-bcb-plantea-ruta-cr%C3%ADtica-para-la-implementaci%C3%B3n-gradual-del-boliviano-digital-hasta-2026",
+      "lat": -16.5,
+      "lon": -68.1
+    },
+    {
+      "jurisdiction": "Suecia",
+      "project": "e-krona",
+      "centralBank": "Sveriges Riksbank",
+      "status": "Investigación",
+      "since": "2017",
+      "note": "Uno de los programas más antiguos y sigue sin decisión de emitir. En marzo de 2026 el Riksbank recomendó al Riksdag abrir una investigación sobre los cambios legales necesarios, propuesta para iniciarse recién cuando el reglamento del euro digital esté cerrado y el BCE decida emitir.",
+      "asOf": "2026-08",
+      "sourceName": "Sveriges Riksbank — Payments Report 2026",
+      "sourceUrl": "https://www.riksbank.se/en-gb/payments--cash/payments-in-sweden/payments-report-2026/the-riksbanks-policy-recommendations/recommendation-for-riksdag-and-government-to-set-up-an-inquiry-on-an-e-krona/",
+      "lat": 59.3,
+      "lon": 18.1
+    },
+    {
+      "jurisdiction": "Estados Unidos",
+      "project": "—",
+      "centralBank": "Federal Reserve",
+      "status": "Descartado",
+      "since": "2025",
+      "note": "Bloqueo por dos vías: la orden ejecutiva del 23/01/2025 prohíbe a las agencias federales emitir o promover una CBDC, y la 21st Century ROAD to Housing Act le impide a la Fed emitir una CBDC minorista de acceso público hasta al menos 2031. La CBDC mayorista no está alcanzada. La política se reorientó a stablecoins reguladas vía GENIUS Act.",
+      "asOf": "2026-08",
+      "sourceName": "CoinDesk — Senate passes housing bill with four-year Fed CBDC ban",
+      "sourceUrl": "https://www.coindesk.com/policy/2026/06/22/u-s-senate-passes-housing-bill-that-carries-four-year-ban-on-a-fed-cbdc",
+      "lat": 38.9,
+      "lon": -77.0
+    }
+  ],
+  "frameworks": [
+    {
+      "name": "MiCA",
+      "jurisdiction": "Unión Europea",
+      "scope": "Emisores de criptoactivos y stablecoins (ART y EMT) y proveedores de servicios (CASP)",
+      "status": "En aplicación",
+      "note": "En aplicación plena desde el 30/12/2024. El período transitorio de 18 meses terminó el 01/07/2026: desde esa fecha, operar con clientes de la UE sin autorización MiCA es ilegal, sin grandfathering ni prórroga. Quien tiene la licencia opera en los 27 estados con pasaporte europeo.",
+      "asOf": "2026-08",
+      "sourceName": "ESMA — Markets in Crypto-Assets Regulation",
+      "sourceUrl": "https://www.esma.europa.eu/esmas-activities/digital-finance-and-innovation/markets-crypto-assets-regulation-mica"
+    },
+    {
+      "name": "GENIUS Act",
+      "jurisdiction": "Estados Unidos",
+      "scope": "Stablecoins de pago respaldadas 1:1",
+      "status": "En aplicación",
+      "note": "Firmada el 18/07/2025. Define quién puede emitir stablecoins de pago y con qué reservas. Es la contracara de la prohibición de CBDC minorista: EE.UU. eligió dólar digital privado y regulado en vez de dólar digital del banco central.",
+      "asOf": "2026-08",
+      "sourceName": "Congress.gov — Central Bank Digital Currencies (CRS)",
+      "sourceUrl": "https://www.congress.gov/crs-product/IF11471"
+    },
+    {
+      "name": "Recomendaciones 15 y 16 (Travel Rule)",
+      "jurisdiction": "GAFI / FATF (global)",
+      "scope": "Activos virtuales y proveedores de servicios (PSAV / VASP)",
+      "status": "En aplicación",
+      "note": "La R.15 extiende las obligaciones de PLD/FT a los activos virtuales y a los PSAV: debida diligencia, registro de operaciones por cinco años y reporte de operaciones sospechosas. La R.16 es la Travel Rule propiamente dicha: identificar a originante y beneficiario en cada transferencia y compartir esos datos. Son dos recomendaciones distintas y se citan mal seguido.",
+      "asOf": "2026-08",
+      "sourceName": "FATF — Virtual Assets",
+      "sourceUrl": "https://www.fatf-gafi.org/en/topics/virtual-assets.html"
+    },
+    {
+      "name": "ASFI Res. 540/2025",
+      "jurisdiction": "Bolivia",
+      "scope": "Empresas de Tecnología Financiera y Proveedores de Servicios de Activos Virtuales (PSAV)",
+      "status": "En aplicación",
+      "note": "Del 03/07/2025. Primera vez que Bolivia regula plataformas fintech y PSAV: registro nacional de activos virtuales, protocolos de ciberseguridad y entornos controlados de prueba. Alcanza a más de 200 empresas ya operando — 176 PSAV y 33 plataformas de pago — que debían pedir autorización antes del 31/12/2025.",
+      "asOf": "2026-08",
+      "sourceName": "ASFI / Opinión — Empresas con activos virtuales deben tramitar licencia",
+      "sourceUrl": "https://www.opinion.com.bo/articulo/pais/asfi-empresas-que-operan-activos-virtuales-deberan-tramitar-licencia-funcionamiento/20250708174851976019.html"
+    },
+    {
+      "name": "R.D. N° 082/2024",
+      "jurisdiction": "Bolivia",
+      "scope": "Operaciones con activos virtuales en el sistema de pagos",
+      "status": "En aplicación",
+      "note": "Del 25/06/2024. El BCB levanta la prohibición vigente desde 2014 y habilita operaciones con activos virtuales por canales electrónicos autorizados. Es el punto de partida de todo lo que vino después: reportes bancarios, registro de PSAV ante la UIF y la Res. 540/2025.",
+      "asOf": "2026-08",
+      "sourceName": "BCB — Activos Virtuales",
+      "sourceUrl": "https://www.bcb.gob.bo/?q=content/activos-virtuales"
+    }
+  ],
+  "timeline": [
+    {
+      "date": "2026-09-01",
+      "actor": "Banco Central de Rusia",
+      "title": "Despliegue obligatorio del rublo digital",
+      "detail": "Los 11 bancos sistémicamente importantes y los comercios de más de ₽120M deben ofrecer operaciones en rublo digital.",
+      "sourceUrl": "https://cbr.ru/eng/press/event/?id=25774"
+    },
+    {
+      "date": "2026-07-01",
+      "actor": "ESMA / Unión Europea",
+      "title": "Termina el período transitorio de MiCA",
+      "detail": "Sin grandfathering ni prórroga: operar con clientes de la UE sin autorización MiCA pasa a ser ilegal.",
+      "sourceUrl": "https://www.esma.europa.eu/esmas-activities/digital-finance-and-innovation/markets-crypto-assets-regulation-mica"
+    },
+    {
+      "date": "2026-06-30",
+      "actor": "Banco Central Europeo",
+      "title": "36 proveedores de pago seleccionados para el piloto del euro digital",
+      "detail": "Entre ellos Deutsche Bank, UniCredit, Revolut, Adyen y Stripe. La fase operativa arranca en el segundo semestre de 2027.",
+      "sourceUrl": "https://www.ecb.europa.eu/euro/digital_euro/pilot/html/index.en.html"
+    },
+    {
+      "date": "2026-06-22",
+      "actor": "Senado de Estados Unidos",
+      "title": "Prohibición legal de CBDC minorista hasta 2031",
+      "detail": "La 21st Century ROAD to Housing Act impide a la Fed emitir una CBDC minorista de acceso público. La mayorista no está alcanzada.",
+      "sourceUrl": "https://www.coindesk.com/policy/2026/06/22/u-s-senate-passes-housing-bill-that-carries-four-year-ban-on-a-fed-cbdc"
+    },
+    {
+      "date": "2026-03-01",
+      "actor": "Sveriges Riksbank",
+      "title": "Recomienda abrir una investigación legislativa sobre la e-krona",
+      "detail": "Propone iniciarla recién cuando el reglamento del euro digital esté cerrado y el BCE decida emitir.",
+      "sourceUrl": "https://www.riksbank.se/en-gb/payments--cash/payments-in-sweden/payments-report-2026/the-riksbanks-policy-recommendations/recommendation-for-riksdag-and-government-to-set-up-an-inquiry-on-an-e-krona/"
+    },
+    {
+      "date": "2025-10-29",
+      "actor": "Banco Central Europeo",
+      "title": "Cierra la fase de preparación del euro digital",
+      "detail": "El Consejo de Gobierno pasa a la siguiente fase, con primera emisión posible proyectada para 2029.",
+      "sourceUrl": "https://www.ecb.europa.eu/euro/digital_euro/pilot/html/index.en.html"
+    },
+    {
+      "date": "2025-10-01",
+      "actor": "BCB",
+      "title": "Primer Informe sobre el Boliviano Digital",
+      "detail": "El BCB traza la ruta crítica de una CBDC mayorista: infraestructura de pagos y compensación entre entidades, no moneda digital para el público.",
+      "sourceUrl": "https://www.bcb.gob.bo/?q=content%2Fel-bcb-plantea-ruta-cr%C3%ADtica-para-la-implementaci%C3%B3n-gradual-del-boliviano-digital-hasta-2026"
+    },
+    {
+      "date": "2025-07-18",
+      "actor": "Estados Unidos",
+      "title": "Se promulga la GENIUS Act",
+      "detail": "Define quién puede emitir stablecoins de pago y con qué reservas. Es la contracara de la prohibición de CBDC minorista.",
+      "sourceUrl": "https://www.congress.gov/crs-product/IF11471"
+    },
+    {
+      "date": "2025-07-03",
+      "actor": "ASFI",
+      "title": "Resolución 540/2025: primer marco boliviano de PSAV",
+      "detail": "Registro nacional de activos virtuales, ciberseguridad y sandbox. Alcanza a 176 PSAV y 33 plataformas de pago.",
+      "sourceUrl": "https://www.opinion.com.bo/articulo/pais/asfi-empresas-que-operan-activos-virtuales-deberan-tramitar-licencia-funcionamiento/20250708174851976019.html"
+    },
+    {
+      "date": "2025-01-23",
+      "actor": "Ejecutivo de Estados Unidos",
+      "title": "Orden ejecutiva que prohíbe a las agencias federales emitir CBDC",
+      "detail": "Reorienta la política hacia stablecoins privadas reguladas.",
+      "sourceUrl": "https://www.congress.gov/crs-product/IF11471"
+    },
+    {
+      "date": "2024-12-30",
+      "actor": "Unión Europea",
+      "title": "MiCA entra en aplicación plena",
+      "detail": "Primer régimen integral de un bloque económico grande para criptoactivos y proveedores de servicios.",
+      "sourceUrl": "https://www.esma.europa.eu/esmas-activities/digital-finance-and-innovation/markets-crypto-assets-regulation-mica"
+    },
+    {
+      "date": "2024-06-25",
+      "actor": "BCB",
+      "title": "R.D. 082/2024 levanta la prohibición de criptoactivos",
+      "detail": "Habilita operaciones con activos virtuales por canales electrónicos autorizados tras diez años de prohibición.",
+      "sourceUrl": "https://www.bcb.gob.bo/?q=content/activos-virtuales"
+    }
+  ]
+}

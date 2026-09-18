@@ -1,0 +1,129 @@
+{
+  "_comment": "Clases de activo tokenizables — capa curada del Tokenization Hub. Cada ficha describe el activo, qué se tokeniza realmente (casi nunca el activo: un derecho verificable sobre él), qué infraestructura exige y dónde está el cuello de botella. asOf marca el corte de revisión.",
+  "_disclaimer": "Las lecturas de madurez son criterio editorial de Blockfinity, no una métrica de mercado. Las cifras de mercado que aparecen en el hub vienen de DeFiLlama en vivo y están señaladas como tales.",
+  "asOf": "2026-08",
+  "classes": [
+    {
+      "slug": "agricultura",
+      "name": "Agricultura",
+      "icon": "AGR",
+      "whatIsTokenized": "El derecho sobre grano depositado y certificado, no el grano. El token representa una tonelada en un almacén verificado, o un contrato de entrega futura.",
+      "maturity": "Emergente con casos productivos",
+      "maturityScore": 6,
+      "infrastructure": "Almacén general de depósito, certificación de calidad y peso, prueba de reserva auditable, seguro sobre la mercadería",
+      "bottleneck": "La confianza no está en la blockchain sino en el acopio: si el almacén no es auditable, el token no vale nada. Es el punto que hace o rompe el caso.",
+      "useCases": [
+        "Warrant tokenizado como garantía de crédito",
+        "Financiamiento sobre cosecha futura",
+        "Pago a proveedores con token de grano",
+        "Trazabilidad de origen para exportación"
+      ],
+      "boliviaRelevance": "Alta — es la vía más corta entre la matriz exportadora boliviana y un caso de tokenización real.",
+      "referenceCases": ["Agrotoken / Justoken", "e-Grains"]
+    },
+    {
+      "slug": "oro",
+      "name": "Oro",
+      "icon": "AU",
+      "whatIsTokenized": "Propiedad fraccionada sobre barras específicas custodiadas en bóveda, identificadas por número de serie.",
+      "maturity": "Madura y en producción a escala",
+      "maturityScore": 9,
+      "infrastructure": "Bóveda con custodio regulado, auditoría de reservas, redención física, certificación LBMA",
+      "bottleneck": "La redención: un token de oro sin proceso claro de canje por metal es un pagaré, no un activo respaldado.",
+      "useCases": [
+        "Reserva de valor con respaldo físico",
+        "Colateral en operaciones de crédito",
+        "Cobertura cambiaria en economías con restricción de divisas",
+        "Liquidación entre contrapartes sin mover metal"
+      ],
+      "boliviaRelevance": "Media-alta — hay producción relevante, pero el sector cooperativo y la sensibilidad AML del oro elevan la exigencia de trazabilidad de origen.",
+      "referenceCases": ["PAX Gold", "Tether Gold", "Kinesis"]
+    },
+    {
+      "slug": "plata",
+      "name": "Plata",
+      "icon": "AG",
+      "whatIsTokenized": "Propiedad fraccionada sobre plata física en bóveda, con el mismo esquema que el oro pero menor demanda institucional.",
+      "maturity": "Existente pero de nicho",
+      "maturityScore": 5,
+      "infrastructure": "Bóveda, auditoría de reservas, redención; el costo logístico por dólar custodiado es mayor que en oro",
+      "bottleneck": "La relación valor/volumen: almacenar plata cuesta mucho más por dólar que el oro, y eso comprime el margen del emisor.",
+      "useCases": [
+        "Exposición a metal industrial sin custodia propia",
+        "Diversificación de reservas corporativas",
+        "Colateral secundario"
+      ],
+      "boliviaRelevance": "Media — peso histórico y producción real, pero el mercado de plata tokenizada es notoriamente más chico que el de oro.",
+      "referenceCases": ["Kinesis"]
+    },
+    {
+      "slug": "litio",
+      "name": "Litio",
+      "icon": "LI",
+      "whatIsTokenized": "No hay un modelo consolidado. Lo tokenizable hoy es el contrato de offtake o el flujo de un proyecto, no el mineral en el salar.",
+      "maturity": "Conceptual",
+      "maturityScore": 2,
+      "infrastructure": "Reserva certificada bajo estándar internacional, contrato de compraventa ejecutable, marco de inversión extranjera claro",
+      "bottleneck": "El recurso en el suelo no es un activo entregable. Tokenizar reservas sin producción ni contrato es vender expectativa, y ahí es donde el modelo se cae.",
+      "useCases": [
+        "Financiamiento de proyecto contra contrato de offtake",
+        "Participación en flujo de regalías",
+        "Trazabilidad de cadena de suministro para exigencias ESG del comprador"
+      ],
+      "boliviaRelevance": "Alta en potencial, muy baja en viabilidad de corto plazo — el cuello de botella es de producción y marco legal, no tecnológico.",
+      "referenceCases": []
+    },
+    {
+      "slug": "carbono",
+      "name": "Créditos de carbono",
+      "icon": "CO2",
+      "whatIsTokenized": "El crédito de carbono ya emitido y registrado, que se representa on-chain para dar liquidez a un mercado históricamente opaco.",
+      "maturity": "Existente con crisis de credibilidad",
+      "maturityScore": 4,
+      "infrastructure": "Registro reconocido (Verra, Gold Standard), verificación por tercero, retiro verificable del crédito",
+      "bottleneck": "La calidad del crédito subyacente. Tokenizar un crédito cuestionado lo vuelve más líquido, no más creíble — y el mercado ya castigó eso.",
+      "useCases": [
+        "Mercado secundario con precio transparente",
+        "Retiro verificable para compromisos corporativos",
+        "Financiamiento de proyectos de conservación"
+      ],
+      "boliviaRelevance": "Media — hay superficie forestal relevante, pero exige certificación internacional que hoy no está montada.",
+      "referenceCases": []
+    },
+    {
+      "slug": "bonos",
+      "name": "Bonos y deuda",
+      "icon": "BND",
+      "whatIsTokenized": "El instrumento de deuda completo: emisión, registro de tenedores y pago de cupones ocurren on-chain.",
+      "maturity": "Madura en mercados desarrollados",
+      "maturityScore": 8,
+      "infrastructure": "Marco legal que reconozca el registro on-chain, agente de pago, custodio, depositario",
+      "bottleneck": "El reconocimiento legal del registro: si la ley no acepta que la titularidad viva on-chain, hace falta un registro paralelo y se pierde la ventaja.",
+      "useCases": [
+        "Emisión con liquidación instantánea",
+        "Fraccionamiento para ampliar la base de inversores",
+        "Pago automatizado de cupones",
+        "Mercado secundario continuo"
+      ],
+      "boliviaRelevance": "Media-alta — es la clase donde un depositario de valores puede moverse primero, porque el activo ya está bajo su perímetro regulatorio.",
+      "referenceCases": ["Bonos corporativos tokenizados en mercados regulados de la región"]
+    },
+    {
+      "slug": "inmuebles",
+      "name": "Bienes raíces",
+      "icon": "RE",
+      "whatIsTokenized": "Participación en la sociedad dueña del inmueble, no el inmueble. El registro de propiedad sigue siendo el estatal.",
+      "maturity": "Existente pero con liquidez decepcionante",
+      "maturityScore": 5,
+      "infrastructure": "Vehículo societario, tasación independiente, administración del inmueble, marco de oferta pública",
+      "bottleneck": "La promesa de liquidez rara vez se cumple: fraccionar no crea compradores. Muchos proyectos terminan con tokens sin mercado secundario real.",
+      "useCases": [
+        "Fraccionamiento de renta comercial",
+        "Acceso a inversión inmobiliaria con ticket bajo",
+        "Distribución automatizada de alquileres"
+      ],
+      "boliviaRelevance": "Media — la demanda existe, pero exige un vehículo societario y un marco de oferta pública que hoy hay que construir.",
+      "referenceCases": ["RealT", "Lofty"]
+    }
+  ]
+}

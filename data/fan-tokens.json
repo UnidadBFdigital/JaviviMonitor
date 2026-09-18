@@ -1,0 +1,79 @@
+{
+  "_comment": "Fan tokens agrupados por competencia. CoinGecko no publica la liga: el mapa es criterio editorial de Blockfinity, por símbolo. Lo que no esté acá cae en 'Sin clasificar' y se muestra como tal. Agregar símbolos acá para ampliar la cobertura.",
+  "leagueMap": {
+    "Serie A (Italia)": [
+      "ASR",
+      "LAZIO",
+      "JUV",
+      "ACM",
+      "INTER",
+      "NAP"
+    ],
+    "LaLiga (España)": [
+      "ATM",
+      "BAR",
+      "SEVILLA",
+      "VCF"
+    ],
+    "Premier League (Inglaterra)": [
+      "CITY",
+      "AFC",
+      "SPURS",
+      "AVL",
+      "EFC"
+    ],
+    "Süper Lig (Turquía)": [
+      "GAL",
+      "TRA",
+      "GOZ",
+      "SAM",
+      "ALA",
+      "IBFK"
+    ],
+    "Brasileirão": [
+      "SANTOS",
+      "MENGO",
+      "GALO",
+      "SCCP",
+      "SPFC",
+      "VERDAO"
+    ],
+    "Primeira Liga (Portugal)": [
+      "PORTO",
+      "BENFICA"
+    ],
+    "Ligue 1 (Francia)": [
+      "PSG",
+      "ASM"
+    ],
+    "Otras ligas europeas": [
+      "LEG"
+    ],
+    "Selecciones nacionales": [
+      "VATRENI",
+      "ARG",
+      "POR",
+      "SPAIN",
+      "ITA",
+      "BELG",
+      "SFA",
+      "SAFA"
+    ],
+    "Fórmula 1": [
+      "ALPINE",
+      "SAUBER",
+      "AM"
+    ],
+    "Deportes de combate": [
+      "UFC",
+      "PFL"
+    ],
+    "Esports y gaming": [
+      "OG",
+      "GUILD"
+    ],
+    "Atletas": [
+      "MODRIC"
+    ]
+  }
+}

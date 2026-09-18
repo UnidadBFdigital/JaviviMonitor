@@ -1,0 +1,116 @@
+{
+  "_comment": "Proyectos de tokenización RWA — datos curados y verificados con fuente. Cifras con fecha de referencia; editar para agregar proyectos.",
+  "marketContext": {
+    "totalRwaOnchainUsd": 31400000000,
+    "tokenizedTreasuriesUsd": 12880000000,
+    "asOf": "2026-05",
+    "sourceName": "RedStone — RWA in Onchain Finance Report",
+    "sourceUrl": "https://blog.redstone.finance/2025/06/26/real-world-assets-in-onchain-finance-report/"
+  },
+  "projects": [
+    {
+      "name": "BUIDL",
+      "issuer": "BlackRock (Securitize)",
+      "asset": "US Treasuries + repos",
+      "category": "Treasuries",
+      "blockchain": "Ethereum (93% del supply) + 7 redes",
+      "valueUsd": 2480000000,
+      "valueAsOf": "2026-06",
+      "custodian": "BNY Mellon",
+      "jurisdiction": "Estados Unidos",
+      "sourceName": "Everstake — Blockchain-Based Funds 2026",
+      "sourceUrl": "https://everstake.one/resources/blog/blockchain-based-funds-tokenized-money-market-index"
+    },
+    {
+      "name": "BENJI (FOBXX)",
+      "issuer": "Franklin Templeton",
+      "asset": "US Government Money Fund",
+      "category": "Treasuries",
+      "blockchain": "Stellar, Ethereum, Polygon, Arbitrum, Base, Aptos, Avalanche, Solana, Canton",
+      "valueUsd": 725000000,
+      "valueAsOf": "2026-06",
+      "custodian": "Franklin Templeton (agente de transferencia propio)",
+      "jurisdiction": "Estados Unidos",
+      "sourceName": "The Block — Franklin Templeton expands tokenized fund",
+      "sourceUrl": "https://www.theblock.co/post/326575/franklin-templeton-expands-tokenized-money-market-fund-to-ethereum"
+    },
+    {
+      "name": "MONY / JLTXX",
+      "issuer": "JPMorgan",
+      "asset": "Money market tokenizado",
+      "category": "Funds",
+      "blockchain": "Infraestructura institucional JPM",
+      "valueUsd": null,
+      "valueAsOf": "2026-05",
+      "custodian": "JPMorgan",
+      "jurisdiction": "Estados Unidos",
+      "sourceName": "Stablecoin Insider — Top tokenized treasury funds 2026",
+      "sourceUrl": "https://stablecoininsider.org/top-10-tokenized-treasury-funds-in-2026-buidl-benji-and-the-highest-yielding-on-chain-options/"
+    }
+  ],
+  "_sectorComment": "Clasificación por sector de los protocolos RWA de DeFiLlama. Es criterio editorial de Blockfinity, no un campo que publique la fuente: se mapea por nombre exacto de protocolo. Lo que no esté acá cae en 'Sin clasificar' y se muestra como tal — nunca se reparte a ojo. Los protocolos de la categoría 'RWA Lending' de DeFiLlama van a 'Crédito privado' por defecto. Agregar nombres acá para ampliar la cobertura.",
+  "sectorMap": {
+    "Treasuries y money market": [
+      "BlackRock BUIDL",
+      "Circle USYC",
+      "Ondo Yield Assets",
+      "Spiko",
+      "WisdomTree",
+      "Invesco USTB",
+      "Ethena USDtb",
+      "OpenTrade",
+      "OpenEden TBILL",
+      "Midas RWA",
+      "Frax USD",
+      "Usual USD0",
+      "Sky RWA",
+      "VanEck Treasury Fund",
+      "Theo Network thBill",
+      "OpenEden USDO",
+      "MatrixDock STBT",
+      "Sygnum FIUSD Liquidity Fund",
+      "stUSDT",
+      "Clearpool TPOOL"
+    ],
+    "Commodities (metales)": [
+      "Tether Gold",
+      "Paxos Gold",
+      "MatrixDock XAUM",
+      "GoldFinger",
+      "Meld Gold"
+    ],
+    "Crédito privado": [
+      "Centrifuge Protocol",
+      "Anemoy Capital",
+      "Securitize Tokenized AAA CLO Fund",
+      "Apollo Diversified Credit Securitize Fund",
+      "Hastra",
+      "Huma Finance V2",
+      "NaraUSD"
+    ],
+    "Fondos y capital privado": [
+      "Blockchain Capital",
+      "Mantle Index Four Fund",
+      "Republic Note"
+    ],
+    "Acciones tokenizadas": [
+      "Ondo Global Markets",
+      "xStocks",
+      "Dinari"
+    ],
+    "Real estate": [
+      "RealT Tokens",
+      "RAAC",
+      "Lofty",
+      "Tangible RWA",
+      "Brickken",
+      "Estate Protocol",
+      "Binaryx Platform",
+      "Vesta Equity"
+    ],
+    "Seguros": [
+      "Re",
+      "OnRe"
+    ]
+  }
+}

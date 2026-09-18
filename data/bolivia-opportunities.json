@@ -1,0 +1,108 @@
+{
+  "_comment": "Panel estratégico de oportunidades de tokenización en Bolivia. Los cuatro puntajes (potencial, madurez, viabilidad, prioridad) son criterio editorial de Blockfinity sobre una escala 1-10, no una medición de mercado. La prioridad NO se escribe: se calcula desde los otros tres, para que ordenar la cartera no dependa de una opinión suelta.",
+  "_metodologia": "potencial = tamaño del activo subyacente en la economía boliviana. madurez = qué tan montada está la infraestructura habilitante (custodia, certificación, marco legal). viabilidad = qué tan ejecutable es un piloto en 12 meses. prioridad = media ponderada 40% viabilidad + 35% potencial + 25% madurez: se privilegia lo ejecutable sobre lo grande.",
+  "asOf": "2026-08",
+  "opportunities": [
+    {
+      "slug": "soya",
+      "name": "Soya",
+      "assetClass": "agricultura",
+      "potencial": 9,
+      "madurez": 6,
+      "viabilidad": 8,
+      "rationale": "Principal complejo exportador del oriente boliviano, con acopios y almacenes generales de depósito ya operando. El activo tokenizable no es el grano sino el warrant sobre grano depositado y certificado.",
+      "habilitadores": [
+        "Red de acopios existente y auditable",
+        "Figura legal de almacén general de depósito ya reconocida",
+        "Demanda real de financiamiento de campaña",
+        "Precedentes regionales directos: Agrotoken en Argentina, e-Grains en El Salvador"
+      ],
+      "bloqueadores": [
+        "Prueba de reserva auditable por tercero independiente",
+        "Reconocimiento del token como garantía ejecutable ante el sistema financiero",
+        "Seguro sobre la mercadería depositada"
+      ],
+      "primerPaso": "Warrant tokenizado con un acopio ancla y un banco dispuesto a aceptarlo como colateral. Es el piloto de menor costo y mayor demostrabilidad."
+    },
+    {
+      "slug": "oro",
+      "name": "Oro",
+      "assetClass": "oro",
+      "potencial": 8,
+      "madurez": 5,
+      "viabilidad": 5,
+      "rationale": "Producción y exportación relevantes, con modelos globales ya probados (PAXG, XAUT). El obstáculo no es el modelo sino la trazabilidad del origen.",
+      "habilitadores": [
+        "Modelo de negocio globalmente validado",
+        "Demanda interna de cobertura ante restricción de divisas",
+        "Activo con mercado internacional profundo"
+      ],
+      "bloqueadores": [
+        "Trazabilidad de origen en un sector con fuerte peso cooperativo",
+        "Exigencias AML reforzadas: el oro es un activo de alto riesgo para GAFI",
+        "Custodia en bóveda con auditoría reconocida internacionalmente"
+      ],
+      "primerPaso": "Antes de tokenizar, resolver la cadena de custodia y certificación de origen. Un token de oro sin origen trazable es un pasivo reputacional, no un producto."
+    },
+    {
+      "slug": "plata",
+      "name": "Plata",
+      "assetClass": "plata",
+      "potencial": 6,
+      "madurez": 4,
+      "viabilidad": 4,
+      "rationale": "Peso histórico y producción real, pero el mercado global de plata tokenizada es marginal frente al de oro y la economía de custodia es peor.",
+      "habilitadores": [
+        "Producción establecida",
+        "Reconocimiento internacional del origen boliviano"
+      ],
+      "bloqueadores": [
+        "Costo de custodia por dólar mucho más alto que en oro",
+        "Demanda institucional escasa",
+        "Mismas exigencias AML que el oro, con menos valor por operación"
+      ],
+      "primerPaso": "No abrir frente propio. Si se hace oro, la plata entra después reutilizando la misma bóveda y el mismo esquema de auditoría."
+    },
+    {
+      "slug": "litio",
+      "name": "Litio",
+      "assetClass": "litio",
+      "potencial": 10,
+      "madurez": 2,
+      "viabilidad": 2,
+      "rationale": "El recurso más grande de la cartera y el menos tokenizable hoy. Un recurso en el salar no es un activo entregable: sin producción ni contrato de venta, no hay nada que respalde un token.",
+      "habilitadores": [
+        "Magnitud del recurso",
+        "Interés internacional sostenido"
+      ],
+      "bloqueadores": [
+        "Producción a escala todavía no consolidada",
+        "Marco de participación privada y de inversión extranjera",
+        "Ausencia de reservas certificadas bajo estándar internacional",
+        "No existe un modelo global consolidado de mineral tokenizado en fase pre-producción"
+      ],
+      "primerPaso": "Ninguno en tokenización. Lo aplicable hoy es trazabilidad de cadena de suministro para exigencias ESG del comprador, que es un producto distinto."
+    },
+    {
+      "slug": "carbono",
+      "name": "Créditos de carbono",
+      "assetClass": "carbono",
+      "potencial": 7,
+      "madurez": 3,
+      "viabilidad": 4,
+      "rationale": "Superficie forestal relevante y demanda corporativa internacional, pero todo el valor depende de una certificación que hoy no está montada localmente.",
+      "habilitadores": [
+        "Base forestal significativa",
+        "Demanda corporativa global de créditos de calidad verificable",
+        "Precio internacional de referencia existente"
+      ],
+      "bloqueadores": [
+        "Certificación bajo registro reconocido (Verra, Gold Standard)",
+        "Verificación por tercero independiente",
+        "Crisis de credibilidad del mercado voluntario, que castiga créditos sin verificación robusta",
+        "Definición de titularidad del crédito frente a comunidades y Estado"
+      ],
+      "primerPaso": "El trabajo previo es de certificación, no de tokenización. Tokenizar un crédito no certificado solo lo vuelve más líquido, no más creíble."
+    }
+  ]
+}
