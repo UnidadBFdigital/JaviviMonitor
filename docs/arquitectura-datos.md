@@ -11,7 +11,44 @@ Versión web del mismo informe: https://claude.ai/artifact/DsaHHMwQrHhhZSU6exaVB
 Alcance: 26 APIs, 4 páginas raspadas, 5 feeds RSS, 1 WebSocket, 41 rutas,
 23 páginas y 12 registros estáticos.
 
-## Estado: optimización aplicada el 21/09/2026
+## Estado: segunda ronda de optimización, 28/09/2026
+
+Medido con un build de producción (`next build` + `next start`), sin el ruido de
+la compilación de desarrollo.
+
+| Qué | Antes | Ahora |
+|---|---|---|
+| Arranque del servidor | — | 1,0 s, con la caché lista en 0,9 s |
+| Rutas de datos, en caliente | 40–200 ms | **10–60 ms** |
+| Páginas | — | **< 20 ms** |
+| Datos que descarga la portada | 387 KB | **110 KB** |
+| Registro de incidentes | 339 KB | **34 KB** |
+| Builder Radar | 221 KB | **40 KB** |
+| Índice de protocolos en caché | 9 MB | **2 MB** |
+
+Qué cambió:
+
+1. **Se cachea lo que se usa, no lo que llega** (punto 4 del plan). `/protocols`
+   devuelve 8,5 MB con decenas de campos por protocolo y la app usa siete: ahora
+   se recorta antes de guardar. Igual con revenue (3,8 MB) y DEX (1,8 MB). Los
+   tres compartían además definiciones duplicadas de la misma clave; ahora hay
+   una sola puerta, `protocolsIndex()`.
+2. **Las respuestas de datos viajan comprimidas.** Next comprime el HTML pero no
+   lo que devuelven las rutas: salían en crudo. Ahora se comprime lo que pasa de
+   16 KB, con `Vary: Accept-Encoding` para que una caché compartida guarde una
+   copia por variante.
+3. **Precalentado al arrancar** (punto 5). `instrumentation.ts` llena las doce
+   claves caras antes de la primera visita: 72 s si no hay nada en disco, 0,9 s
+   si la copia existe. En desarrollo solo corre con `BF_WARMUP=1`, para no
+   descargar 20 MB en cada recompilación.
+4. **La carpeta de caché ya no crece sola.** Al arrancar se borran las copias sin
+   escribir en siete días, que era el riesgo de "caché sin tope" de la auditoría.
+
+Punto 6 del plan —unificar las 11 peticiones de la portada en una— deja de
+justificarse: son 110 KB en total y cada una responde en decenas de
+milisegundos. Siguen pendientes los puntos 8, 10 y 11, todos menores.
+
+## Estado: primera ronda, 21/09/2026
 
 Hechos los puntos 1, 2, 3 y 7 del plan. Medido reiniciando el servidor, que es
 el caso real: proceso nuevo, memoria vacía, copia en disco disponible.
