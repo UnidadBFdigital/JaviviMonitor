@@ -1,7 +1,7 @@
 import { PageHeader } from "@/components/PageHeader";
 import { ScorecardView } from "@/components/blockchains/ScorecardView";
 
-export const metadata = { title: "Scorecard & BBI — Blockfinity Research" };
+export const metadata = { title: "Scorecard & BBI — BBIM" };
 
 export default function ScorecardPage() {
   return (

@@ -174,7 +174,7 @@ export function OverviewStrip() {
       period: "perfil general",
       spark: [],
       sparkPositive: true,
-      source: "Blockfinity Research",
+      source: "Blockfinity BBIM",
       freshness: "DAILY",
       fetchedAt: payload.generatedAt,
       gold: true,

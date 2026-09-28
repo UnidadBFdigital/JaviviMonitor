@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { FRESH, jsonCached } from "@/lib/httpCache";
 import { getDailyCandles } from "@/lib/sources/cryptocom";
 import { getYahooSeries, MACRO_SYMBOLS } from "@/lib/sources/yahoo";
 
@@ -83,7 +83,7 @@ export async function GET() {
 
   const unavailable = series.filter((s) => !s.byDate).map((s) => s.label);
 
-  return NextResponse.json({
+  return jsonCached({
     ok: true,
     labels,
     matrix,
@@ -91,5 +91,5 @@ export async function GET() {
     window: "~90 días, retornos log diarios (días comunes entre mercados)",
     sources: "Crypto.com Exchange (BTC/ETH/SOL) · Yahoo Finance (BNB y macro)",
     fetchedAt: new Date().toISOString(),
-  });
+  }, FRESH.hour);
 }

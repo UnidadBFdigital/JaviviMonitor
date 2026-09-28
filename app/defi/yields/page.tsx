@@ -2,7 +2,7 @@ import Link from "next/link";
 import { PageHeader } from "@/components/PageHeader";
 import { YieldExplorer } from "@/components/yields/YieldExplorer";
 
-export const metadata = { title: "DeFi Yields — Blockfinity Research" };
+export const metadata = { title: "DeFi Yields — BBIM" };
 
 // Rendimientos DeFi para quien quiere hacer rendir un activo: prestar, hacer
 // staking, proveer liquidez, tasa fija o vaults, con histórico, plazos y

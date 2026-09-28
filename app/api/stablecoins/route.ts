@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { FRESH, jsonCached } from "@/lib/httpCache";
 import {
   getStablecoins,
   getSupplyByIssuer,
@@ -23,5 +23,5 @@ export async function GET() {
     getNewsByCategory("Banca", 6),
     getNewsByCategory("Regulación", 6),
   ]);
-  return NextResponse.json({ list, byIssuer, focus, history, total, pagos, banca, regulacion });
+  return jsonCached({ list, byIssuer, focus, history, total, pagos, banca, regulacion }, FRESH.minutes30);
 }

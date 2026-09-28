@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { FRESH, jsonCached } from "@/lib/httpCache";
 import { buildNetworks, REGISTRY_META } from "@/lib/networks/build";
 import { INDEX_VERSION } from "@/lib/networks/score";
 
@@ -14,7 +14,7 @@ import { INDEX_VERSION } from "@/lib/networks/score";
 export async function GET() {
   const { networks, sources, failed, generatedAt } = await buildNetworks();
 
-  return NextResponse.json({
+  return jsonCached({
     generatedAt,
     indexVersion: INDEX_VERSION,
     registry: REGISTRY_META,
@@ -22,5 +22,5 @@ export async function GET() {
     failed,
     sources,
     networks,
-  });
+  }, FRESH.minutes30);
 }

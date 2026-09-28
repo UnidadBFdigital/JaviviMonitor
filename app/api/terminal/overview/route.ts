@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { FRESH, jsonCached, withCache } from "@/lib/httpCache";
 import { getTickers, getDailyCandles } from "@/lib/sources/cryptocom";
 import { getGlobalMarket } from "@/lib/sources/coingecko";
 import { getTvlHistory } from "@/lib/sources/defillama";
@@ -43,7 +44,7 @@ export async function GET() {
     if (c.ok) sparklines[inst] = c.data.map((k) => k.close);
   });
 
-  return NextResponse.json({
+  return withCache(NextResponse.json({
     tickers,
     bnb,
     global,
@@ -60,5 +61,5 @@ export async function GET() {
         }
       : tvl,
     sparklines,
-  });
+  }), FRESH.minutes5);
 }

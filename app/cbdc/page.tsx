@@ -4,7 +4,7 @@ import { CbdcMap } from "@/components/cbdc/CbdcMap";
 import { RegulatoryTimeline } from "@/components/cbdc/RegulatoryTimeline";
 import cbdcJson from "@/data/cbdc-tracker.json";
 
-export const metadata = { title: "CBDC & Regulación — Blockfinity Research" };
+export const metadata = { title: "CBDC & Regulación — BBIM" };
 
 // Orden de avance, del proyecto más maduro al descartado.
 const STATUS_RANK: Record<string, number> = {

@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { FRESH, jsonCached } from "@/lib/httpCache";
 import {
   getStablecoins,
   getSupplyHistory,
@@ -66,9 +66,9 @@ export async function GET() {
     dex: dex.ok ? dex.data : null,
   };
 
-  return NextResponse.json({
+  return jsonCached({
     indices: computeIndices(ctx),
     fetchedAt: new Date().toISOString(),
     sources: ["DeFiLlama", "Alternative.me", "CoinGecko", "Yahoo Finance"],
-  });
+  }, FRESH.minutes10);
 }

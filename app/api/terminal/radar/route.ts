@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { FRESH, jsonCached, withCache } from "@/lib/httpCache";
 import { getNewsByCategory } from "@/lib/sources/news";
 
 // Radar institucional de la portada: cinco frentes que un ejecutivo del
@@ -20,7 +21,7 @@ export async function GET() {
 
   const riesgos = todo.ok ? todo.data.filter((h) => RIESGO.test(h.title)).slice(0, 6) : [];
 
-  return NextResponse.json({
+  return withCache(NextResponse.json({
     stablecoins,
     tokenizacion,
     regulacion,
@@ -28,5 +29,5 @@ export async function GET() {
     riesgos: todo.ok
       ? { ok: true as const, data: riesgos, source: todo.source, fetchedAt: todo.fetchedAt, stale: todo.stale }
       : todo,
-  });
+  }), FRESH.minutes30);
 }

@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { NAV } from "@/components/Sidebar";
+import { NAV } from "@/lib/nav";
+import { INTEREST_BY_ID } from "@/lib/interests";
 
 // Mapa vivo del terminal. Se construye con el MISMO array de navegación que
 // alimenta el sidebar, así que una vista nueva aparece acá sin tocar nada:
@@ -97,6 +98,22 @@ export function TerminalMap() {
                       <div className="nx-enter mb-1 ml-2 border-l-2 border-electric/50 py-1 pl-2.5">
                         <p className="text-[11px] leading-relaxed text-ink-secondary">
                           {QUESTION[item.href] ?? "Vista del terminal."}
+                        </p>
+                        {/* a quién le sirve: el mismo registro que filtra el menú */}
+                        <p className="mt-1 flex flex-wrap gap-1">
+                          {item.interests.map((id) => {
+                            const interest = INTEREST_BY_ID.get(id);
+                            if (!interest) return null;
+                            return (
+                              <span
+                                key={id}
+                                title={`${interest.audience} · ${interest.unit}`}
+                                className="border border-line px-1 py-0.5 text-[9px] text-ink-muted"
+                              >
+                                {interest.short}
+                              </span>
+                            );
+                          })}
                         </p>
                         <Link
                           href={item.href}

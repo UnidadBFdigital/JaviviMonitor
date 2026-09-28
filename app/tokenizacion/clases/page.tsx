@@ -2,7 +2,7 @@ import Link from "next/link";
 import { PageHeader } from "@/components/PageHeader";
 import assetClasses from "@/data/asset-classes.json";
 
-export const metadata = { title: "Asset Classes — Blockfinity Research" };
+export const metadata = { title: "Asset Classes — BBIM" };
 
 function MaturityBar({ score }: { score: number }) {
   const tone = score >= 8 ? "bg-up" : score >= 5 ? "bg-warn" : "bg-down";

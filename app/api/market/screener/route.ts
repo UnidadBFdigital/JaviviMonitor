@@ -1,4 +1,5 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { type NextRequest } from "next/server";
+import { FRESH, jsonCached } from "@/lib/httpCache";
 import { parseScreenerQuery, queryScreener, type ScreenerPayload } from "@/lib/marketScreener";
 import { getMarketUniverse, searchCoinGecko } from "@/lib/sources/coingeckoScreener";
 
@@ -10,7 +11,7 @@ export async function GET(request: NextRequest) {
   const universe = await getMarketUniverse();
   if (!universe.ok) {
     const payload: ScreenerPayload = { ok: false, source: universe.source, error: "CoinGecko no devolvió el listado de mercado" };
-    return NextResponse.json(payload, { status: 502 });
+    return jsonCached(payload, FRESH.minutes5, { status: 502 });
   }
 
   let coins = universe.data.coins;
@@ -42,5 +43,5 @@ export async function GET(request: NextRequest) {
     fetchedAt: universe.fetchedAt,
     stale: universe.stale,
   };
-  return NextResponse.json(payload);
+  return jsonCached(payload, FRESH.minutes5);
 }

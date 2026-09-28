@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { FRESH, jsonCached } from "@/lib/httpCache";
 import { getNewsByCategory } from "@/lib/sources/news";
 
 // El tracker de jurisdicciones es un dataset curado que la página lee directo
@@ -9,5 +9,5 @@ export async function GET() {
     getNewsByCategory("CBDC", 8),
     getNewsByCategory("Regulación", 10),
   ]);
-  return NextResponse.json({ cbdc, regulacion });
+  return jsonCached({ cbdc, regulacion }, FRESH.minutes30);
 }

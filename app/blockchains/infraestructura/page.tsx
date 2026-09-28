@@ -1,7 +1,7 @@
 import { PageHeader } from "@/components/PageHeader";
 import { NetworkIntelligence } from "@/components/networks/NetworkIntelligence";
 
-export const metadata = { title: "Builder Radar — Blockfinity Research" };
+export const metadata = { title: "Builder Radar — BBIM" };
 
 // Cuarta vista de Blockchain Intelligence. Landscape mide actividad y capital,
 // Scorecard juzga la red como contraparte institucional y Riesgos mira los

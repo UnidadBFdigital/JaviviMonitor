@@ -8,7 +8,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { RwaMarketView } from "@/components/tokenization/RwaMarketView";
 import { RwaHeadlineMetrics } from "@/components/tokenization/RwaHeadlineMetrics";
 
-export const metadata = { title: "Tokenization Intelligence — Blockfinity Research" };
+export const metadata = { title: "Tokenization Intelligence — BBIM" };
 
 function fmtUsd(v: number | null): string {
   if (v === null) return "No disponible";

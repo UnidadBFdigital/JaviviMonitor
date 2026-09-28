@@ -2,7 +2,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { CaseStudiesGrid } from "@/components/tokenization/CaseStudiesGrid";
 import caseStudies from "@/data/case-studies.json";
 
-export const metadata = { title: "Global Case Studies — Blockfinity Research" };
+export const metadata = { title: "Global Case Studies — BBIM" };
 
 export default function CaseStudiesPage() {
   return (

@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { FRESH, jsonCached } from "@/lib/httpCache";
 import { getAllChainsTvl } from "@/lib/sources/defillama";
 import { getRwaDashboardMetrics } from "@/lib/sources/defillamaRwa";
 import { getStablecoinTotal } from "@/lib/sources/stablecoins";
@@ -88,5 +88,5 @@ export async function GET() {
     failed.push(fng.source);
   }
 
-  return NextResponse.json({ values, failed, fetchedAt: new Date().toISOString() });
+  return jsonCached({ values, failed, fetchedAt: new Date().toISOString() }, FRESH.minutes10);
 }

@@ -1,7 +1,7 @@
 import partnershipsJson from "@/data/partnerships.json";
 import { PageHeader } from "@/components/PageHeader";
 
-export const metadata = { title: "Institutional Partnerships — Blockfinity Research" };
+export const metadata = { title: "Institutional Partnerships — BBIM" };
 
 const STATUS_STYLE: Record<string, string> = {
   Activo: "bg-up/15 text-up",

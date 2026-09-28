@@ -1,7 +1,7 @@
 import { PageHeader } from "@/components/PageHeader";
 import { ReportDocument } from "@/components/report/ReportDocument";
 
-export const metadata = { title: "Blockchain Landscape Report — Blockfinity Research" };
+export const metadata = { title: "Blockchain Landscape Report — BBIM" };
 
 export default function InformePage() {
   return (

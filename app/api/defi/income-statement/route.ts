@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { FRESH, jsonCached } from "@/lib/httpCache";
 import {
   getProtocolIncomeStatement,
   getProtocolRevenue,
@@ -10,5 +11,5 @@ export async function GET(request: NextRequest) {
     getProtocolRevenue(20),
     getProtocolIncomeStatement(protocol),
   ]);
-  return NextResponse.json({ ranking, statement });
+  return jsonCached({ ranking, statement }, FRESH.minutes30);
 }

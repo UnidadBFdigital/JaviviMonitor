@@ -3,7 +3,7 @@ import { NexumLayer } from "@/components/nexum/NexumLayer";
 import type { NexumCurriculum } from "@/lib/nexum";
 
 export const metadata = {
-  title: "NEXUM Intelligence Layer — Blockfinity Research",
+  title: "NEXUM Intelligence Layer — BBIM",
   description:
     "Capa educativa del terminal: dashboards simplificados, esquemas animados y ejercicios prácticos sobre un snapshot de datos.",
 };

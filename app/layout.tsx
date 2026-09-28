@@ -4,8 +4,9 @@ import { HistoryProvider } from "@/components/history/HistoryProvider";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Blockfinity Research",
-  description: "Terminal interna de inteligencia blockchain — Blockfinity Advisors",
+  // el nombre completo va en la raíz; las demás páginas usan la sigla
+  title: "Blockfinity Blockchain Intelligence Monitor (BBIM)",
+  description: "BBIM — terminal interna de inteligencia blockchain de Blockfinity Advisors",
 };
 
 export default function RootLayout({
