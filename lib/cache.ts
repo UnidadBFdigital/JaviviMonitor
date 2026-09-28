@@ -77,6 +77,33 @@ export async function saveSnapshot<T>(key: string, snapshot: Snapshot<T>): Promi
   }
 }
 
+/**
+ * Borra copias que nadie volvió a escribir en `maxAgeMs`. Sin esto la carpeta
+ * crece sola: cambiar la forma de una clave (`…:v2`) deja huérfano el archivo
+ * de la anterior, y un dato de hace semanas ya no se sirve igual.
+ * Devuelve cuántos archivos borró.
+ */
+export async function pruneSnapshots(maxAgeMs = 7 * 24 * 60 * 60 * 1000): Promise<number> {
+  const node = nodeModules();
+  if (!node) return 0;
+  try {
+    const dir = process.env.BF_CACHE_DIR || node.path.join(node.os.tmpdir(), "blockfinity-research-cache");
+    const files = await node.fs.readdir(dir);
+    let borrados = 0;
+    for (const file of files) {
+      if (!file.endsWith(".json")) continue;
+      const full = node.path.join(dir, file);
+      const stat = await node.fs.stat(full);
+      if (Date.now() - stat.mtimeMs <= maxAgeMs) continue;
+      await node.fs.unlink(full);
+      borrados += 1;
+    }
+    return borrados;
+  } catch {
+    return 0;
+  }
+}
+
 export async function readSnapshot<T>(key: string): Promise<Snapshot<T> | null> {
   const node = nodeModules();
   if (!node) return null;

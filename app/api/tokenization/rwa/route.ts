@@ -1,5 +1,4 @@
-import { NextResponse } from "next/server";
-import { FRESH, jsonCached, withCache } from "@/lib/httpCache";
+import { FRESH, jsonCached } from "@/lib/httpCache";
 import { getRwaProtocols } from "@/lib/sources/defillama";
 import { getRwaDashboardMetrics } from "@/lib/sources/defillamaRwa";
 import { getRwaMarketTokens } from "@/lib/sources/coingecko";
@@ -26,7 +25,7 @@ export async function GET() {
         protocols: [],
         insights: [],
         marketTokens,
-      },
+    },
       FRESH.minutes30
     );
   }
@@ -36,8 +35,8 @@ export async function GET() {
     tokenizationJson.sectorMap as Record<string, string[]>
   );
 
-  return withCache(
-    NextResponse.json({
+  return jsonCached(
+    {
       source: {
         ok: true,
         source: protocols.source,
@@ -51,7 +50,7 @@ export async function GET() {
       protocols: protocols.data.slice(0, 40),
       insights: buildRwaInsights(sectors, protocols.data, totalUsd),
       marketTokens,
-    }),
+    },
     FRESH.minutes30
   );
 }

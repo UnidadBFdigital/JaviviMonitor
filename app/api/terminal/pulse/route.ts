@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { FRESH, jsonCached, withCache } from "@/lib/httpCache";
+import { FRESH, jsonCached } from "@/lib/httpCache";
 import { getFearGreed } from "@/lib/sources/feargreed";
 import { getGlobalMarket } from "@/lib/sources/coingecko";
 import { getStablecoins, getStablecoinTotal } from "@/lib/sources/stablecoins";

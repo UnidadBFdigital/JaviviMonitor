@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { FRESH, jsonCached, withCache } from "@/lib/httpCache";
+import { FRESH, jsonCached } from "@/lib/httpCache";
 import {
   bestByOperation,
   buildPulse,

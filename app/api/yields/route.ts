@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { FRESH, jsonCached, withCache } from "@/lib/httpCache";
+import { FRESH, jsonCached } from "@/lib/httpCache";
 import {
   buildPulse,
   filterPools,

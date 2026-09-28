@@ -1,7 +1,6 @@
 import { cached } from "@/lib/cache";
 import { aggregateRwaAssets, extractRwaPageData, type RwaClass, type RwaPlatform } from "@/lib/rwaClasses";
 import type { SourceResult } from "./types";
-import { get } from "node:https";
 
 const RWA_PAGE_URL = "https://defillama.com/rwa";
 const RWA_PUBLIC_READER_URL = "https://r.jina.ai/https://defillama.com/rwa";
@@ -138,9 +137,22 @@ async function fetchViaPublicReader(format: "html" | "text"): Promise<string> {
   return body;
 }
 
+/**
+ * `https.get` de Node, pedido en tiempo de ejecución.
+ *
+ * Un import estático de `node:https` rompe cualquier bundle que no sea el de
+ * Node —el del navegador o el runtime edge, que compila el archivo de
+ * instrumentación— aunque esta función nunca se ejecute ahí.
+ */
+function httpsGet() {
+  const get = typeof process !== "undefined" ? process.getBuiltinModule : undefined;
+  if (typeof get !== "function") throw new Error("https solo está disponible en el servidor");
+  return get("node:https").get;
+}
+
 function fetchDashboardHtml(url = RWA_PAGE_URL, redirects = 0): Promise<string> {
   return new Promise((resolve, reject) => {
-    const request = get(
+    const request = httpsGet()(
       url,
       {
         headers: {
