@@ -209,3 +209,35 @@ export async function cached<T>(
     throw err;
   }
 }
+
+/**
+ * Limpia las copias en disco que hayan superado la antigüedad máxima permitida.
+ */
+export async function pruneSnapshots(maxAgeMs = DEFAULT_MAX_STALE_MS): Promise<number> {
+  const node = nodeModules();
+  if (!node) return 0;
+
+  try {
+    const dir = process.env.BF_CACHE_DIR || node.path.join(node.os.tmpdir(), "blockfinity-research-cache");
+    const files = await node.fs.readdir(dir);
+    const now = Date.now();
+    let removed = 0;
+
+    for (const file of files) {
+      if (!file.endsWith(".json")) continue;
+      const filePath = node.path.join(dir, file);
+      try {
+        const stat = await node.fs.stat(filePath);
+        if (now - stat.mtimeMs > maxAgeMs) {
+          await node.fs.unlink(filePath);
+          removed++;
+        }
+      } catch {
+        // Ignorar errores al leer/eliminar un archivo individual
+      }
+    }
+    return removed;
+  } catch {
+    return 0;
+  }
+}

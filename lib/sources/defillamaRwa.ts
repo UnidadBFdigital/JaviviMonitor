@@ -137,64 +137,27 @@ async function fetchViaPublicReader(format: "html" | "text"): Promise<string> {
   return body;
 }
 
-/**
- * `https.get` de Node, pedido en tiempo de ejecución.
- *
- * Un import estático de `node:https` rompe cualquier bundle que no sea el de
- * Node —el del navegador o el runtime edge, que compila el archivo de
- * instrumentación— aunque esta función nunca se ejecute ahí.
- */
-function httpsGet() {
-  const get = typeof process !== "undefined" ? process.getBuiltinModule : undefined;
-  if (typeof get !== "function") throw new Error("https solo está disponible en el servidor");
-  return get("node:https").get;
-}
-
-function fetchDashboardHtml(url = RWA_PAGE_URL, redirects = 0): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const request = httpsGet()(
-      url,
-      {
-        headers: {
-          accept: "text/html,application/xhtml+xml",
-          "accept-language": "en-US,en;q=0.9",
-          // Cloudflare rechaza el fingerprint de undici/fetch en esta página,
-          // pero a veces permite una petición HTTPS convencional con UA de navegador.
-          "user-agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
-        },
-      },
-      (response) => {
-        const status = response.statusCode ?? 0;
-        const location = response.headers.location;
-        if (status >= 300 && status < 400 && location && redirects < 3) {
-          response.resume();
-          resolve(fetchDashboardHtml(new URL(location, url).toString(), redirects + 1));
-          return;
-        }
-        if (status < 200 || status >= 300) {
-          response.resume();
-          reject(new Error(`${RWA_DASHBOARD_SOURCE} → HTTP ${status}`));
-          return;
-        }
-
-        const chunks: Buffer[] = [];
-        let bytes = 0;
-        response.on("data", (chunk: Buffer) => {
-          bytes += chunk.length;
-          if (bytes > MAX_HTML_BYTES) {
-            request.destroy(new Error("Respuesta RWA demasiado grande"));
-            return;
-          }
-          chunks.push(chunk);
-        });
-        response.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")));
-        response.on("error", reject);
-      }
-    );
-    request.setTimeout(20_000, () => request.destroy(new Error("Timeout consultando RWA")));
-    request.on("error", reject);
+async function fetchDashboardHtml(url = RWA_PAGE_URL): Promise<string> {
+  const response = await fetch(url, {
+    headers: {
+      accept: "text/html,application/xhtml+xml",
+      "accept-language": "en-US,en;q=0.9",
+      "user-agent":
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+    },
+    signal: AbortSignal.timeout(20_000),
   });
+
+  if (!response.ok) {
+    throw new Error(`${RWA_DASHBOARD_SOURCE} → HTTP ${response.status}`);
+  }
+
+  const body = await response.text();
+  if (body.length > MAX_HTML_BYTES) {
+    throw new Error("Respuesta RWA demasiado grande");
+  }
+
+  return body;
 }
 
 export async function getRwaDashboardMetrics(): Promise<SourceResult<RwaDashboardMetrics>> {
