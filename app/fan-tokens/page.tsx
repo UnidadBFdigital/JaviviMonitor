@@ -1,7 +1,7 @@
 import { PageHeader } from "@/components/PageHeader";
 import { FanTokensView } from "@/components/fan/FanTokensView";
 
-export const metadata = { title: "Fan Token Analytics — Blockfinity Research" };
+export const metadata = { title: "Fan Token Analytics — BBIM" };
 
 export default function FanTokensPage() {
   return (

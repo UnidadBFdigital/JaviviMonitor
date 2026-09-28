@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { FRESH, jsonCached } from "@/lib/httpCache";
 import { getInstitutionalNews, getRegulatoryNews } from "@/lib/sources/news";
 
 export async function GET() {
@@ -6,5 +6,5 @@ export async function GET() {
     getInstitutionalNews(20),
     getRegulatoryNews(8),
   ]);
-  return NextResponse.json({ institutional, regulatory });
+  return jsonCached({ institutional, regulatory }, FRESH.minutes30);
 }

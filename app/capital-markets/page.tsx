@@ -1,7 +1,7 @@
 import { PageHeader } from "@/components/PageHeader";
 import { CapitalMarketsView } from "@/components/capital/CapitalMarketsView";
 
-export const metadata = { title: "Capital Markets — Blockfinity Research" };
+export const metadata = { title: "Capital Markets — BBIM" };
 
 export default function CapitalMarketsPage() {
   return (

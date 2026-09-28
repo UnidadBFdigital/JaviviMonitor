@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { FRESH, jsonCached, withCache } from "@/lib/httpCache";
 import {
   buildPulse,
   filterPools,
@@ -20,7 +21,7 @@ export async function GET(request: NextRequest) {
   const universe = await getYieldUniverse();
   if (!universe.ok) {
     const payload: YieldsPayload = { ok: false, source: universe.source, error: "DeFiLlama Yields no respondió" };
-    return NextResponse.json(payload, { status: 502 });
+    return jsonCached(payload, FRESH.minutes30, { status: 502 });
   }
 
   const pools = universe.data.pools;
@@ -58,5 +59,5 @@ export async function GET(request: NextRequest) {
     fetchedAt: universe.fetchedAt,
     stale: universe.stale,
   };
-  return NextResponse.json(payload);
+  return jsonCached(payload, FRESH.minutes30);
 }

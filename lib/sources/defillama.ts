@@ -39,14 +39,44 @@ type RawProtocol = {
   change_7d: number | null;
 };
 
+/**
+ * Índice de protocolos, recortado antes de entrar a la caché.
+ *
+ * /protocols devuelve 8,5 MB con decenas de campos por protocolo y la app usa
+ * siete. Guardar la respuesta entera costaba esos 8,5 MB en memoria y otro
+ * tanto en la copia en disco, y cada lectura recorría objetos gigantes. Acá se
+ * recorta una vez, al traerlo: lo que queda cacheado es ~3% de lo que llega.
+ *
+ * Es la única puerta a esta clave: el módulo de yields también la usa para su
+ * directorio de protocolos, así que una sola definición evita que dos copias
+ * de la misma clave guarden formas distintas.
+ */
+export function protocolsIndex() {
+  return cached("defillama:protocols:v2", async () => {
+    const raw = await fetchJson<Partial<RawProtocol>[]>("/protocols");
+    const slim: RawProtocol[] = [];
+    for (const p of Array.isArray(raw) ? raw : []) {
+      if (typeof p.name !== "string" || typeof p.slug !== "string") continue;
+      slim.push({
+        name: p.name,
+        slug: p.slug,
+        category: typeof p.category === "string" ? p.category : "—",
+        chain: typeof p.chain === "string" ? p.chain : "—",
+        tvl: typeof p.tvl === "number" ? p.tvl : null,
+        change_1d: typeof p.change_1d === "number" ? p.change_1d : null,
+        change_7d: typeof p.change_7d === "number" ? p.change_7d : null,
+      });
+    }
+    if (slim.length === 0) throw new Error(`${SOURCE} /protocols → sin protocolos`);
+    return slim;
+  });
+}
+
 export async function getTopProtocols(
   limit = 10
 ): Promise<SourceResult<ProtocolTvl[]>> {
   try {
-    const { data, fetchedAt, stale } = await cached(
-      "defillama:protocols",
-      () => fetchJson<RawProtocol[]>("/protocols")
-    );
+    const { data, fetchedAt, stale } = await protocolsIndex();
     const top = data
       // los CEX aparecen en /protocols pero no son protocolos DeFi
       .filter((p) => p.category !== "CEX")
@@ -74,10 +104,7 @@ export type Movers = { gainers: ProtocolTvl[]; losers: ProtocolTvl[] };
 
 export async function getMovers(count = 5): Promise<SourceResult<Movers>> {
   try {
-    const { data, fetchedAt, stale } = await cached(
-      "defillama:protocols",
-      () => fetchJson<RawProtocol[]>("/protocols")
-    );
+    const { data, fetchedAt, stale } = await protocolsIndex();
     // solo protocolos con TVL relevante para evitar ruido de micro-caps
     const eligible = data
       .filter((p) => p.category !== "CEX")
@@ -132,14 +159,23 @@ export async function getProtocolRevenue(
   limit = 10
 ): Promise<SourceResult<ProtocolRevenue[]>> {
   try {
-    const { data, fetchedAt, stale } = await cached(
-      "defillama:revenue",
-      () =>
-        fetchJson<RawFeesOverview>(
-          "/overview/fees?excludeTotalDataChart=true&excludeTotalDataChartBreakdown=true&dataType=dailyRevenue"
-        )
-    );
-    const top = (data.protocols ?? [])
+    // la respuesta trae 3,8 MB; de cada protocolo se guardan cinco campos
+    const { data, fetchedAt, stale } = await cached("defillama:revenue:v2", async () => {
+      const raw = await fetchJson<RawFeesOverview>(
+        "/overview/fees?excludeTotalDataChart=true&excludeTotalDataChartBreakdown=true&dataType=dailyRevenue"
+      );
+      return (raw.protocols ?? [])
+        .filter((p) => typeof p.name === "string" && typeof p.total24h === "number")
+        .map((p) => ({
+          name: p.name,
+          slug: p.slug,
+          category: p.category,
+          total24h: p.total24h,
+          total7d: p.total7d,
+          total30d: p.total30d,
+        }));
+    });
+    const top = data
       .filter((p) => typeof p.total24h === "number" && p.total24h! > 0)
       .sort((a, b) => (b.total24h ?? 0) - (a.total24h ?? 0))
       .slice(0, limit)
@@ -322,13 +358,21 @@ type RawDexOverview = {
 
 export async function getDexOverview(): Promise<SourceResult<DexOverview>> {
   try {
-    const { data, fetchedAt, stale } = await cached(
-      "defillama:dex-overview",
-      () =>
-        fetchJson<RawDexOverview>(
-          "/overview/dexs?excludeTotalDataChart=true&excludeTotalDataChartBreakdown=true"
-        )
-    );
+    // 1,8 MB de los que solo se usan dos totales y el ranking corto
+    const { data, fetchedAt, stale } = await cached("defillama:dex-overview:v2", async () => {
+      const raw = await fetchJson<RawDexOverview>(
+        "/overview/dexs?excludeTotalDataChart=true&excludeTotalDataChartBreakdown=true"
+      );
+      return {
+        total24h: raw.total24h,
+        change_7dover7d: raw.change_7dover7d,
+        protocols: (raw.protocols ?? [])
+          .filter((p) => typeof p.name === "string" && typeof p.total24h === "number")
+          .sort((a, b) => (b.total24h ?? 0) - (a.total24h ?? 0))
+          .slice(0, 20)
+          .map((p) => ({ name: p.name, total24h: p.total24h })),
+      };
+    });
     return {
       ok: true,
       data: {
@@ -543,9 +587,7 @@ const RWA_CATEGORIES = ["RWA", "RWA Lending"];
 
 export async function getRwaProtocols(): Promise<SourceResult<ProtocolTvl[]>> {
   try {
-    const { data, fetchedAt, stale } = await cached("defillama:protocols", () =>
-      fetchJson<RawProtocol[]>("/protocols")
-    );
+    const { data, fetchedAt, stale } = await protocolsIndex();
     const rwa = data
       .filter((p) => RWA_CATEGORIES.includes(p.category))
       .filter((p) => typeof p.tvl === "number" && p.tvl! > 0)

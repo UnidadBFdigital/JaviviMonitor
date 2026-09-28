@@ -29,11 +29,17 @@ export type CacheOptions = {
   /** Durante este lapso tras un fallo no se reintenta: se sirve el valor
    *  vencido si lo hay, o se relanza el mismo error al instante. */
   failureTtlMs?: number;
-  /** Guarda en disco el último valor válido. Para fuentes frágiles (un scrape,
-   *  una cuota anónima): si el proceso se reinicia justo cuando la fuente
-   *  falla, se sirve la copia marcada como caché en vez de "sin respuesta". */
+  /** Copia en disco del último valor válido, activa por defecto: un reinicio
+   *  no vuelve a descargar nada ni deja una vista en "sin respuesta".
+   *  `false` para datos que no valga la pena escribir. */
   persist?: boolean;
+  /** Cuánto se acepta seguir sirviendo un dato vencido mientras se refresca
+   *  por detrás. Pasado ese punto, la petición espera el dato nuevo. */
+  maxStaleMs?: number;
 };
+
+/** Tras 24 h sin poder refrescar, el dato deja de servirse sin avisar. */
+const DEFAULT_MAX_STALE_MS = 24 * 60 * 60 * 1000;
 
 /* ---------- copia en disco ---------- */
 
@@ -83,10 +89,14 @@ export async function readSnapshot<T>(key: string): Promise<Snapshot<T> | null> 
 }
 
 /**
- * Devuelve el valor cacheado si sigue vigente; si no, ejecuta `fetcher`,
- * guarda el resultado y lo devuelve. Las llamadas concurrentes a la misma
- * clave comparten una sola ejecución. Si `fetcher` falla y hay un valor
- * vencido, devuelve el vencido como fallback (mejor dato viejo que nada).
+ * Devuelve el valor cacheado si sigue vigente. Si venció, devuelve el que hay
+ * —al instante— y manda la recarga por detrás: quien llega justo después del
+ * vencimiento ya no paga la descarga completa. Solo espera quien no tiene nada
+ * que leer: la primera carga de la clave, o un dato tan viejo que ya no sirve.
+ *
+ * Las llamadas concurrentes a la misma clave comparten una sola ejecución, y
+ * un fallo del `fetcher` nunca tumba al que pidió: se sirve lo anterior marcado
+ * como caché.
  */
 export async function cached<T>(
   key: string,
@@ -95,12 +105,13 @@ export async function cached<T>(
   ttlMs: number | ((data: T) => number) = DEFAULT_TTL_MS,
   options: CacheOptions = {}
 ): Promise<{ data: T; fetchedAt: string; stale: boolean }> {
+  const persist = options.persist !== false;
   let hit = store.get(key) as Entry<T> | undefined;
 
   // Proceso nuevo (un reinicio, una recompilación de `next dev`): la copia en
   // disco vale con su hora original. Si sigue dentro del TTL se sirve sin
   // consultar —un reinicio no gasta cuota—; si venció, queda como respaldo.
-  if (!hit && options.persist) {
+  if (!hit && persist) {
     const snapshot = await readSnapshot<T>(key);
     if (snapshot) {
       const ttl = typeof ttlMs === "function" ? ttlMs(snapshot.data) : ttlMs;
@@ -113,15 +124,11 @@ export async function cached<T>(
     return { data: hit.data, fetchedAt: hit.fetchedAt, stale: false };
   }
 
-  const failure = failures.get(key);
-  if (failure && failure.until > Date.now()) {
-    if (hit) return { data: hit.data, fetchedAt: hit.fetchedAt, stale: true };
-    throw failure.error;
-  }
-
-  let pending = inFlight.get(key) as Promise<T> | undefined;
-  if (!pending) {
-    pending = (async () => {
+  /** Una sola recarga por clave, la compartan quienes la compartan. */
+  const refresh = (): Promise<T> => {
+    const running = inFlight.get(key) as Promise<T> | undefined;
+    if (running) return running;
+    const started = (async () => {
       try {
         const data = await fetcher();
         const fetchedAt = new Date().toISOString();
@@ -131,20 +138,43 @@ export async function cached<T>(
           expiresAt: Date.now() + (typeof ttlMs === "function" ? ttlMs(data) : ttlMs),
         });
         failures.delete(key);
-        if (options.persist) await saveSnapshot(key, { data, fetchedAt });
+        if (persist) await saveSnapshot(key, { data, fetchedAt });
         return data;
       } catch (err) {
         if (options.failureTtlMs) failures.set(key, { error: err, until: Date.now() + options.failureTtlMs });
         throw err;
       }
     })();
-    inFlight.set(key, pending);
+    inFlight.set(key, started);
     // se limpia siempre, resuelva o falle
-    pending.catch(() => {}).finally(() => inFlight.delete(key));
+    started.catch(() => {}).finally(() => inFlight.delete(key));
+    return started;
+  };
+
+  const failure = failures.get(key);
+  const failing = failure !== undefined && failure.until > Date.now();
+
+  if (hit) {
+    const age = Date.now() - Date.parse(hit.fetchedAt);
+    if (age < (options.maxStaleMs ?? DEFAULT_MAX_STALE_MS)) {
+      // se refresca por detrás, salvo que la fuente esté en su ventana de fallo
+      if (!failing) void refresh().catch(() => {});
+      // dentro de un TTL de gracia el dato es tan bueno como antes de vencer;
+      // más viejo que eso, viaja marcado como caché. La hora real siempre va
+      // en fetchedAt, así que la interfaz nunca miente sobre la edad.
+      const grace = typeof ttlMs === "function" ? ttlMs(hit.data) : ttlMs;
+      return { data: hit.data, fetchedAt: hit.fetchedAt, stale: age > grace * 2 };
+    }
   }
 
+  if (failing) {
+    if (hit) return { data: hit.data, fetchedAt: hit.fetchedAt, stale: true };
+    throw failure!.error;
+  }
+
+  // Sin nada que servir: toca esperar.
   try {
-    const data = await pending;
+    const data = await refresh();
     const entry = store.get(key) as Entry<T>;
     return { data, fetchedAt: entry?.fetchedAt ?? new Date().toISOString(), stale: false };
   } catch (err) {

@@ -12,7 +12,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const c = assetClasses.classes.find((x) => x.slug === slug);
-  return { title: `${c?.name ?? "Asset Class"} — Blockfinity Research` };
+  return { title: `${c?.name ?? "Asset Class"} — BBIM` };
 }
 
 function Panel({ title, children }: { title: string; children: React.ReactNode }) {

@@ -3,7 +3,7 @@ import { PageHeader } from "@/components/PageHeader";
 import boliviaOps from "@/data/bolivia-opportunities.json";
 import { OpportunityMatrix } from "@/components/charts/OpportunityMatrix";
 
-export const metadata = { title: "Bolivia Opportunities — Blockfinity Research" };
+export const metadata = { title: "Bolivia Opportunities — BBIM" };
 
 /** La prioridad no se escribe en el JSON: se calcula, para que ordenar la
  *  cartera no dependa de una opinión suelta sino de los tres puntajes base. */

@@ -6,7 +6,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { TickerStrip } from "@/components/terminal/TickerStrip";
 import { MarketPerformanceChart } from "@/components/market/MarketPerformanceChart";
 
-export const metadata = { title: "Mercado — Blockfinity Research" };
+export const metadata = { title: "Mercado — BBIM" };
 
 export default function MercadoPage() {
   return (

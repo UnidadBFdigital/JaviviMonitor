@@ -1,7 +1,7 @@
 import eventsJson from "@/data/bolivia-events.json";
 import { eventColor } from "@/lib/eventColors";
 
-export const metadata = { title: "Timeline regulatorio Bolivia — Blockfinity Research" };
+export const metadata = { title: "Timeline regulatorio Bolivia — BBIM" };
 
 
 

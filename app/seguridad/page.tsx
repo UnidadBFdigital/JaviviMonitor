@@ -1,7 +1,7 @@
 import { PageHeader } from "@/components/PageHeader";
 import { SecurityDashboard } from "@/components/security/SecurityDashboard";
 
-export const metadata = { title: "Exploits & Seguridad — Blockfinity Research" };
+export const metadata = { title: "Exploits & Seguridad — BBIM" };
 
 export default function SeguridadPage() {
   return (

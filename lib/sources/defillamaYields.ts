@@ -8,6 +8,7 @@
 // la ficha muestra la tasa actual y lo declara, no la reconstruye.
 
 import { cached } from "@/lib/cache";
+import { protocolsIndex } from "./defillama";
 import { buildUniverse, type ProtocolInfo, type RawLendBorrow, type RawYieldPool, type YieldPool } from "@/lib/yields";
 import type { SourceResult } from "./types";
 
@@ -25,18 +26,15 @@ async function fetchJson<T>(url: string, timeoutMs = 30_000): Promise<T> {
   return response.json() as Promise<T>;
 }
 
-type RawProtocol = { slug?: unknown; name?: unknown; category?: unknown };
-
 /**
  * Nombre y categoría de cada protocolo. Comparte la entrada de caché con el
  * resto del terminal: /protocols se descarga una vez para todas las vistas.
  */
 async function protocolDirectory(): Promise<Map<string, ProtocolInfo>> {
-  const { data } = await cached("defillama:protocols", () => fetchJson<RawProtocol[]>("https://api.llama.fi/protocols"));
+  const { data } = await protocolsIndex();
   const map = new Map<string, ProtocolInfo>();
-  for (const p of Array.isArray(data) ? data : []) {
-    if (typeof p.slug !== "string" || typeof p.name !== "string") continue;
-    map.set(p.slug, { name: p.name, category: typeof p.category === "string" ? p.category : null });
+  for (const p of data) {
+    map.set(p.slug, { name: p.name, category: p.category });
   }
   return map;
 }

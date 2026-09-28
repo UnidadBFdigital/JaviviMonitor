@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { FRESH, jsonCached } from "@/lib/httpCache";
 import {
   getTopProtocols,
   getProtocolRevenue,
@@ -16,5 +16,5 @@ export async function GET() {
     getChainsTvl(15),
     getDexOverview(),
   ]);
-  return NextResponse.json({ protocols, revenue, chains, dex });
+  return jsonCached({ protocols, revenue, chains, dex }, FRESH.minutes30);
 }

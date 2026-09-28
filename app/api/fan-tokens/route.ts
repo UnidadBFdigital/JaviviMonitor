@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { FRESH, jsonCached } from "@/lib/httpCache";
 import { getFanTokens } from "@/lib/sources/coingecko";
 import { buildLeagues, buildFanInsights } from "@/lib/fanTokens";
 import fanJson from "@/data/fan-tokens.json";
@@ -9,14 +9,14 @@ export async function GET() {
   const tokens = await getFanTokens(50);
 
   if (!tokens.ok) {
-    return NextResponse.json({
+    return jsonCached({
       source: tokens,
       totalMarketCapUsd: 0,
       totalVolume24hUsd: 0,
       leagues: [],
       tokens: [],
       insights: [],
-    });
+    }, FRESH.minutes30);
   }
 
   const { leagues, totalMarketCapUsd, totalVolume24hUsd } = buildLeagues(
@@ -24,7 +24,7 @@ export async function GET() {
     fanJson.leagueMap as Record<string, string[]>
   );
 
-  return NextResponse.json({
+  return jsonCached({
     source: {
       ok: true,
       source: tokens.source,
@@ -36,5 +36,5 @@ export async function GET() {
     leagues,
     tokens: tokens.data,
     insights: buildFanInsights(leagues, tokens.data, totalMarketCapUsd, totalVolume24hUsd),
-  });
+  }, FRESH.minutes30);
 }

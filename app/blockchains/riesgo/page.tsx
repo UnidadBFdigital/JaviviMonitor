@@ -1,7 +1,7 @@
 import { PageHeader } from "@/components/PageHeader";
 import { RiskView } from "@/components/blockchains/RiskView";
 
-export const metadata = { title: "Risk Profiles — Blockfinity Research" };
+export const metadata = { title: "Risk Profiles — BBIM" };
 
 export default function RiskPage() {
   return (

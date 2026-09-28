@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { FRESH, jsonCached } from "@/lib/httpCache";
 import { buildBbiInsights, buildUseCaseRecommendations } from "@/lib/bbi";
 import { getBlockchainSnapshot } from "@/lib/blockchainSnapshot";
 import { ACTIVITY_METRICS, BBI_VERSION } from "@/lib/bbiMethodology";
@@ -8,7 +8,7 @@ import { ACTIVITY_METRICS, BBI_VERSION } from "@/lib/bbiMethodology";
 export async function GET() {
   const { chains, stablecoins, activity, weights, asOf, networks: scored } = await getBlockchainSnapshot();
 
-  return NextResponse.json({
+  return jsonCached({
     source: chains.ok
       ? { ok: true, source: chains.source, fetchedAt: chains.fetchedAt, stale: chains.stale }
       : { ok: false, source: chains.source },
@@ -28,5 +28,5 @@ export async function GET() {
       ? { ok: true, source: stablecoins.source, fetchedAt: stablecoins.fetchedAt, stale: stablecoins.stale }
       : { ok: false, source: stablecoins.source },
     activity,
-  });
+  }, FRESH.minutes30);
 }

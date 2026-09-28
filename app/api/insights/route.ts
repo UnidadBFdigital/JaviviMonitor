@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { FRESH, jsonCached } from "@/lib/httpCache";
 import {
   getTvlHistory,
   getMovers,
@@ -187,7 +187,7 @@ export async function GET() {
     pregunta = "¿Qué métrica del terminal mostró el cambio más anómalo esta semana y qué lo explica?";
   }
 
-  return NextResponse.json({
+  return jsonCached({
     ok: true,
     // 10 señales. Stablecoins es pilar del producto y su línea se generaba
     // sexta, así que quedaba fuera con un tope de 5 hallazgos.
@@ -197,5 +197,5 @@ export async function GET() {
     pregunta,
     method: "Derivado por reglas de los datos del terminal — sin generación libre.",
     fetchedAt: new Date().toISOString(),
-  });
+  }, FRESH.minutes10);
 }

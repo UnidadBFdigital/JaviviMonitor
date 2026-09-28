@@ -3,140 +3,98 @@
 import { useEffect, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { countByInterest, filterNav, MODULES, type Group } from "@/lib/nav";
+import { INTEREST_BY_ID, INTERESTS, type InterestId } from "@/lib/interests";
+import { createPrefStore } from "@/lib/prefStore";
 
-// La navegación se organiza por vertical de decisión (qué necesita saber el
-// cliente), no por tipo de dato. Las URLs se mantienen como estaban.
-//
-// `code` es la etiqueta del modo contraído: tres caracteres en mono, que es
-// lo único que entra en el riel de 56 px. No es decorativo — sin él, el
-// sidebar contraído no diría en qué sección está parado el usuario.
-export type Item = { label: string; href: string; code: string };
-export type Group = { title: string; items: Item[] };
+const collapsedStore = createPrefStore<boolean>(
+  "bf-nav-collapsed",
+  false,
+  (raw) => raw === "1",
+  (value) => (value ? "1" : "0")
+);
 
-export const NAV: Group[] = [
-  {
-    title: "Executive Brief",
-    items: [
-      { href: "/", label: "Portada del día", code: "HOY" },
-      { href: "/informe", label: "Informe descargable", code: "PDF" },
-    ],
-  },
-  {
-    title: "Institutional Intelligence",
-    items: [
-      { href: "/tokenizacion", label: "Tokenization Hub", code: "TKN" },
-      { href: "/tokenizacion/clases", label: "· Asset Classes", code: "CLS" },
-      { href: "/tokenizacion/casos", label: "· Global Case Studies", code: "CAS" },
-      { href: "/tokenizacion/bolivia", label: "· Bolivia Opportunities", code: "OPB" },
-      { href: "/stablecoins", label: "Stablecoin Intelligence", code: "STB" },
-      { href: "/capital-markets", label: "Capital Markets", code: "CAP" },
-      { href: "/cbdc", label: "CBDC & Regulation", code: "CBD" },
-    ],
-  },
-  {
-    title: "Blockfinity Indices",
-    items: [{ href: "/indices", label: "Índices propietarios", code: "IDX" }],
-  },
-  {
-    title: "Blockchain Intelligence",
-    items: [
-      { href: "/blockchains", label: "Landscape", code: "LND" },
-      { href: "/blockchains/scorecard", label: "Scorecard & BBI", code: "BBI" },
-      { href: "/blockchains/riesgo", label: "Risk Profiles", code: "RSK" },
-      { href: "/blockchains/infraestructura", label: "Builder Radar", code: "BLD" },
-    ],
-  },
-  {
-    title: "Bolivia Intelligence",
-    items: [
-      { href: "/bolivia/noticias", label: "Bolivia News", code: "BNW" },
-      { href: "/bolivia/timeline", label: "Timeline regulatorio", code: "TML" },
-    ],
-  },
-  {
-    title: "Market Intelligence",
-    items: [
-      { href: "/mercado", label: "Crypto Markets", code: "MKT" },
-      { href: "/onchain", label: "Bitcoin & On-chain", code: "BTC" },
-      { href: "/defi", label: "Protocol Analytics", code: "DFI" },
-      { href: "/defi/yields", label: "· DeFi Yields", code: "YLD" },
-      { href: "/seguridad", label: "Exploits & Seguridad", code: "SEC" },
-      { href: "/correlaciones", label: "Correlation Lab", code: "COR" },
-    ],
-  },
-  {
-    title: "Research Lab",
-    items: [
-      { href: "/noticias", label: "News B2B", code: "NWS" },
-      { href: "/partnerships", label: "Partnerships", code: "PTN" },
-      { href: "/fan-tokens", label: "Fan Token Analytics", code: "FAN" },
-      { href: "/ia", label: "AI Workspace", code: "IA" },
-    ],
-  },
-  {
-    title: "NEXUM Intelligence Layer",
-    items: [{ href: "/nexum", label: "Aula del terminal", code: "NXM" }],
-  },
-];
+// El filtro por perfil se guarda como lista separada por comas: legible al
+// depurar y estable entre pestañas. Los ids desconocidos se descartan, por si
+// la taxonomía cambia mientras alguien tiene el filtro puesto.
+const interestStore = createPrefStore<InterestId[]>(
+  "bf-nav-interests",
+  [],
+  (raw) => raw.split(",").filter((id): id is InterestId => INTEREST_BY_ID.has(id as InterestId)),
+  (value) => value.join(",")
+);
 
-const STORAGE_KEY = "bf-nav-collapsed";
+function useInterests(): InterestId[] {
+  return useSyncExternalStore(
+    interestStore.subscribe,
+    interestStore.getSnapshot,
+    interestStore.getServerSnapshot
+  );
+}
 
-// La preferencia de contraído vive en localStorage, que es un store externo:
-// leerlo con useSyncExternalStore evita el render extra de un useEffect y
-// mantiene sincronizadas dos pestañas abiertas del terminal.
-const listeners = new Set<() => void>();
-let snapshot: boolean | null = null;
+/**
+ * Filtro por punto de interés: "soy de cumplimiento, muéstrame lo mío".
+ * Sin nada marcado se ve todo el terminal; marcar varios suma módulos, no los
+ * cruza.
+ */
+function InterestFilter({ selected }: { selected: InterestId[] }) {
+  const visible = filterNav(selected).reduce((total, group) => total + group.items.length, 0);
 
-function readCollapsed(): boolean {
-  try {
-    return window.localStorage.getItem(STORAGE_KEY) === "1";
-  } catch {
-    // navegador con almacenamiento bloqueado: se queda expandido
-    return false;
+  function toggle(id: InterestId) {
+    const next = selected.includes(id) ? selected.filter((x) => x !== id) : [...selected, id];
+    interestStore.set(next);
   }
+
+  return (
+    <div className="mb-4 border-b border-line/70 pb-3">
+      <div className="mb-2 flex items-baseline justify-between gap-2 pl-2.5 pr-2">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-ink-muted">
+          Ver por perfil
+        </p>
+        {selected.length > 0 && (
+          <button
+            onClick={() => interestStore.set([])}
+            className="text-[10px] text-electric hover:underline"
+          >
+            Ver todo
+          </button>
+        )}
+      </div>
+      <div className="flex flex-wrap gap-1 px-2">
+        {INTERESTS.map((interest) => {
+          const on = selected.includes(interest.id);
+          return (
+            <button
+              key={interest.id}
+              onClick={() => toggle(interest.id)}
+              aria-pressed={on}
+              title={`${interest.audience}. ${interest.question} · ${countByInterest(interest.id)} módulos`}
+              className={`border px-1.5 py-0.5 text-[10px] transition-colors ${
+                on
+                  ? "border-electric bg-electric/15 text-ink"
+                  : "border-line text-ink-muted hover:border-line/80 hover:text-ink"
+              }`}
+            >
+              {interest.short}
+            </button>
+          );
+        })}
+      </div>
+      {selected.length > 0 && (
+        <p className="mt-2 px-2 text-[10px] leading-relaxed text-ink-muted">
+          {visible} de {MODULES.length} módulos ·{" "}
+          {selected.map((id) => INTEREST_BY_ID.get(id)?.label).join(", ")}
+        </p>
+      )}
+    </div>
+  );
 }
 
-function subscribe(onChange: () => void): () => void {
-  listeners.add(onChange);
-  const onStorage = (event: StorageEvent) => {
-    if (event.key !== STORAGE_KEY) return;
-    snapshot = null;
-    listeners.forEach((listener) => listener());
-  };
-  window.addEventListener("storage", onStorage);
-  return () => {
-    listeners.delete(onChange);
-    window.removeEventListener("storage", onStorage);
-  };
-}
-
-/** Debe devolver el MISMO valor mientras no cambie el store, de ahí la caché. */
-function getSnapshot(): boolean {
-  if (snapshot === null) snapshot = readCollapsed();
-  return snapshot;
-}
-
-/** En el servidor no hay preferencia: se renderiza expandido y el cliente
- *  corrige tras la hidratación. */
-function getServerSnapshot(): boolean {
-  return false;
-}
-
-function setCollapsed(next: boolean) {
-  snapshot = next;
-  try {
-    window.localStorage.setItem(STORAGE_KEY, next ? "1" : "0");
-  } catch {
-    // la preferencia no persiste, pero la sesión sigue funcionando
-  }
-  listeners.forEach((listener) => listener());
-}
-
-function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
+function NavLinks({ groups, onNavigate }: { groups: Group[]; onNavigate?: () => void }) {
   const pathname = usePathname();
   return (
     <>
-      {NAV.map((group) => (
+      {groups.map((group) => (
         <div key={group.title} className="mb-5">
           <div className="mb-1.5 flex items-center gap-2 pl-2.5 pr-2">
             <p className="whitespace-nowrap text-[10px] font-semibold uppercase tracking-[0.1em] text-ink-muted">
@@ -155,6 +113,7 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
                 href={item.href}
                 onClick={onNavigate}
                 aria-current={active ? "page" : undefined}
+                title={`${item.label} — ${item.interests.map((id) => INTEREST_BY_ID.get(id)?.label).join(" · ")}`}
                 className={`relative flex items-center gap-2 border-l-2 py-1.5 pl-2.5 pr-2 text-[13px] transition-all duration-150 ${
                   active
                     ? "border-electric bg-electric/10 font-medium text-ink"
@@ -180,11 +139,11 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
 /** Riel contraído: solo el código de tres letras, con el nombre completo en
  *  el tooltip nativo. El flyout en HTML no sirve acá — el `overflow-y-auto`
  *  del aside lo recortaría contra el borde. */
-function NavRail() {
+function NavRail({ groups }: { groups: Group[] }) {
   const pathname = usePathname();
   return (
     <>
-      {NAV.map((group, gi) => (
+      {groups.map((group, gi) => (
         <div key={group.title} className={gi === 0 ? "" : "mt-3 border-t border-line/70 pt-3"}>
           {group.items.map((item) => {
             const active = pathname === item.href;
@@ -216,10 +175,10 @@ function Brand() {
     <>
       <p className="flex items-baseline gap-2 text-sm font-bold tracking-tight">
         <span className="bf-slash" aria-hidden />
-        Blockfinity <span className="-ml-1 text-electric">Research</span>
+        Blockfinity <span className="-ml-1 text-electric">BBIM</span>
       </p>
       <p className="mt-1 pl-[11px] text-[10px] uppercase tracking-[0.18em] text-ink-muted">
-        Research Terminal
+        Blockchain Intelligence Monitor
       </p>
     </>
   );
@@ -246,10 +205,16 @@ function CollapseIcon({ collapsed }: { collapsed: boolean }) {
 
 export function Sidebar() {
   const [open, setOpen] = useState(false);
-  const collapsed = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const collapsed = useSyncExternalStore(
+    collapsedStore.subscribe,
+    collapsedStore.getSnapshot,
+    collapsedStore.getServerSnapshot
+  );
+  const selected = useInterests();
+  const groups = filterNav(selected);
 
   function toggleCollapsed() {
-    setCollapsed(!getSnapshot());
+    collapsedStore.set(!collapsedStore.getSnapshot());
   }
 
   // Atajo "[" — el mismo gesto de los IDE. Se ignora mientras se escribe.
@@ -287,7 +252,8 @@ export function Sidebar() {
         </div>
         {open && (
           <nav className="max-h-[70vh] overflow-y-auto border-t border-line px-2 py-3">
-            <NavLinks onNavigate={() => setOpen(false)} />
+            <InterestFilter selected={selected} />
+            <NavLinks groups={groups} onNavigate={() => setOpen(false)} />
           </nav>
         )}
       </div>
@@ -306,7 +272,7 @@ export function Sidebar() {
           }`}
         >
           {collapsed ? (
-            <span className="bf-slash mt-1.5 text-xl" aria-hidden title="Blockfinity Research" />
+            <span className="bf-slash mt-1.5 text-xl" aria-hidden title="Blockfinity BBIM" />
           ) : (
             <div className="min-w-0">
               <Brand />
@@ -323,7 +289,14 @@ export function Sidebar() {
           </button>
         </div>
         <nav className={`relative flex-1 py-3 ${collapsed ? "px-1" : "px-2"}`}>
-          {collapsed ? <NavRail /> : <NavLinks />}
+          {collapsed ? (
+            <NavRail groups={groups} />
+          ) : (
+            <>
+              <InterestFilter selected={selected} />
+              <NavLinks groups={groups} />
+            </>
+          )}
         </nav>
         {!collapsed && (
           <div className="relative border-t border-line px-4 py-3 text-[10px] leading-relaxed text-ink-muted">

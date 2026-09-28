@@ -3,7 +3,7 @@ import { NewsCard } from "@/components/news/NewsCard";
 import { InstitutionalRadar } from "@/components/terminal/InstitutionalRadar";
 import { PageHeader } from "@/components/PageHeader";
 
-export const metadata = { title: "News B2B — Blockfinity Research" };
+export const metadata = { title: "News B2B — BBIM" };
 
 export default function NoticiasPage() {
   return (

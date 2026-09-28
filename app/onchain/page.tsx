@@ -4,7 +4,7 @@ import { EthStatsCard } from "@/components/onchain/EthStatsCard";
 import { PageHeader } from "@/components/PageHeader";
 import { NetworkActivityChart } from "@/components/onchain/NetworkActivityChart";
 
-export const metadata = { title: "Bitcoin & On-chain — Blockfinity Research" };
+export const metadata = { title: "Bitcoin & On-chain — BBIM" };
 
 export default function OnchainPage() {
   return (

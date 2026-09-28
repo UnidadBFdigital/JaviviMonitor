@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { FRESH, jsonCached, withCache } from "@/lib/httpCache";
 import { getFearGreed } from "@/lib/sources/feargreed";
 import { getGlobalMarket } from "@/lib/sources/coingecko";
 import { getStablecoins, getStablecoinTotal } from "@/lib/sources/stablecoins";
@@ -15,5 +16,5 @@ export async function GET() {
   ]);
   // `stables` es el top 5 por emisor (para la lista); `stableTotal` es el
   // total canónico del mercado. No son intercambiables.
-  return NextResponse.json({ fearGreed, global, stables, stableTotal, dex });
+  return jsonCached({ fearGreed, global, stables, stableTotal, dex }, FRESH.minutes10);
 }

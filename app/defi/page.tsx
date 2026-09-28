@@ -12,7 +12,7 @@ import {
   DexRankingCard,
 } from "@/components/defi/AnalyticsCards";
 
-export const metadata = { title: "Protocol Analytics — Blockfinity Research" };
+export const metadata = { title: "Protocol Analytics — BBIM" };
 
 export default function DefiPage() {
   return (

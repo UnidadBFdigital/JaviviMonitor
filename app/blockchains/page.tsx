@@ -1,7 +1,7 @@
 import { PageHeader } from "@/components/PageHeader";
 import { LandscapeView } from "@/components/blockchains/LandscapeView";
 
-export const metadata = { title: "Blockchain Landscape — Blockfinity Research" };
+export const metadata = { title: "Blockchain Landscape — BBIM" };
 
 export default function LandscapePage() {
   return (

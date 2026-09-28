@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { FRESH, jsonCached, withCache } from "@/lib/httpCache";
 import { getRwaProtocols } from "@/lib/sources/defillama";
 import { getRwaDashboardMetrics } from "@/lib/sources/defillamaRwa";
 import { getRwaMarketTokens } from "@/lib/sources/coingecko";
@@ -16,15 +17,18 @@ export async function GET() {
   ]);
 
   if (!protocols.ok) {
-    return NextResponse.json({
-      source: protocols,
-      dashboard,
-      totalUsd: 0,
-      sectors: [],
-      protocols: [],
-      insights: [],
-      marketTokens,
-    });
+    return jsonCached(
+      {
+        source: protocols,
+        dashboard,
+        totalUsd: 0,
+        sectors: [],
+        protocols: [],
+        insights: [],
+        marketTokens,
+      },
+      FRESH.minutes30
+    );
   }
 
   const { sectors, totalUsd } = buildSectors(
@@ -32,19 +36,22 @@ export async function GET() {
     tokenizationJson.sectorMap as Record<string, string[]>
   );
 
-  return NextResponse.json({
-    source: {
-      ok: true,
-      source: protocols.source,
-      fetchedAt: protocols.fetchedAt,
-      stale: protocols.stale,
-    },
-    dashboard,
-    totalUsd,
-    sectors,
-    // la tabla del hub no necesita los 128: el resto es cola larga
-    protocols: protocols.data.slice(0, 40),
-    insights: buildRwaInsights(sectors, protocols.data, totalUsd),
-    marketTokens,
-  });
+  return withCache(
+    NextResponse.json({
+      source: {
+        ok: true,
+        source: protocols.source,
+        fetchedAt: protocols.fetchedAt,
+        stale: protocols.stale,
+      },
+      dashboard,
+      totalUsd,
+      sectors,
+      // la tabla del hub no necesita los 128: el resto es cola larga
+      protocols: protocols.data.slice(0, 40),
+      insights: buildRwaInsights(sectors, protocols.data, totalUsd),
+      marketTokens,
+    }),
+    FRESH.minutes30
+  );
 }

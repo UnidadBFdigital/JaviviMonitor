@@ -1,6 +1,15 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const os = require("node:os");
+const path = require("node:path");
 const load = require("./load-ts.cjs");
+
+// La caché persiste en disco por defecto: sin una carpeta propia, una corrida
+// leería las copias de la anterior y los contadores de llamadas mentirían.
+const CACHE_DIR = fs.mkdtempSync(path.join(os.tmpdir(), "bf-cache-tests-"));
+process.env.BF_CACHE_DIR = CACHE_DIR;
+test.after(() => fs.rmSync(CACHE_DIR, { recursive: true, force: true }));
 
 const { cached } = load("lib/cache.ts");
 const { parseRwaDashboardHtml } = load("lib/sources/defillamaRwa.ts");
@@ -80,16 +89,54 @@ test("el TTL puede depender del dato: un resultado parcial vence antes que uno c
   const ttl = (data) => (data.partial ? 1 : 60_000);
   await cached("t:ttl-fn", fetcher, ttl);
   await sleep(5);
-  const second = await cached("t:ttl-fn", fetcher, ttl);
-  assert.equal(second.data.partial, false, "el parcial venció y se volvió a pedir");
+  // el parcial venció: se sirve igual y la recarga sale por detrás
+  await cached("t:ttl-fn", fetcher, ttl);
+  await sleep(5);
+  const third = await cached("t:ttl-fn", fetcher, ttl);
+  assert.equal(third.data.partial, false, "la recarga de fondo dejó el completo");
   await cached("t:ttl-fn", fetcher, ttl);
   assert.equal(calls, 2, "el completo queda en caché");
 });
 
+test("un dato vencido se sirve al instante y la recarga va por detrás", async () => {
+  let calls = 0;
+  const slow = async () => {
+    calls++;
+    await sleep(60);
+    return calls;
+  };
+  await cached("t:swr", slow, 1);
+  await sleep(5);
+
+  const started = Date.now();
+  const served = await cached("t:swr", slow, 1);
+  const waited = Date.now() - started;
+
+  assert.equal(served.data, 1, "responde con lo que ya había");
+  assert.ok(waited < 40, `no espera a la fuente lenta (esperó ${waited} ms)`);
+  assert.equal(calls, 2, "pero la recarga sí salió");
+
+  await sleep(100);
+  const after = await cached("t:swr", slow, 60_000);
+  assert.equal(after.data, 2, "la siguiente lectura ya trae el dato nuevo");
+});
+
+test("un dato demasiado viejo deja de servirse solo: esa petición sí espera", async () => {
+  const { saveSnapshot } = load("lib/cache.ts");
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "bf-cache-old-"));
+  process.env.BF_CACHE_DIR = dir;
+  try {
+    await saveSnapshot("t:ancient", { data: "viejo", fetchedAt: "2020-01-01T00:00:00.000Z" });
+    const served = await cached("t:ancient", async () => "nuevo", 60_000, { maxStaleMs: 60_000 });
+    assert.equal(served.data, "nuevo", "pasado el límite de antigüedad se espera el dato fresco");
+    assert.equal(served.stale, false);
+  } finally {
+    process.env.BF_CACHE_DIR = CACHE_DIR;
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test("una fuente frágil sobrevive a un reinicio con la copia en disco", async () => {
-  const fs = require("node:fs");
-  const os = require("node:os");
-  const path = require("node:path");
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "bf-cache-test-"));
   process.env.BF_CACHE_DIR = dir;
   try {
@@ -114,13 +161,35 @@ test("una fuente frágil sobrevive a un reinicio con la copia en disco", async (
     assert.equal(calls, 0);
     assert.deepEqual([fresh.data, fresh.stale], [{ commits: 3 }, false]);
 
-    // sin persist, el mismo caso sigue fallando: la copia es opt-in
-    await saveSnapshot("t:opt-in", { data: 1, fetchedAt: "2026-09-18T10:00:00.000Z" });
-    await assert.rejects(cached("t:opt-in", failing), /cuota agotada/);
+    // con persist: false no se mira el disco, ni para escribir ni para leer
+    await saveSnapshot("t:opt-out", { data: 1, fetchedAt: "2026-09-18T10:00:00.000Z" });
+    await assert.rejects(cached("t:opt-out", failing, 60_000, { persist: false }), /cuota agotada/);
     // y sin copia previa, el error llega intacto
     await assert.rejects(cached("t:no-copy", failing, 60_000, { persist: true }), /cuota agotada/);
   } finally {
-    delete process.env.BF_CACHE_DIR;
+    process.env.BF_CACHE_DIR = CACHE_DIR;
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("la limpieza borra las copias viejas y respeta las recientes", async () => {
+  const { saveSnapshot, pruneSnapshots, readSnapshot } = load("lib/cache.ts");
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "bf-cache-prune-"));
+  process.env.BF_CACHE_DIR = dir;
+  try {
+    await saveSnapshot("t:vieja", { data: 1, fetchedAt: "2020-01-01T00:00:00.000Z" });
+    await saveSnapshot("t:nueva", { data: 2, fetchedAt: new Date().toISOString() });
+    // la antigüedad la marca el archivo, no el campo: se envejece a mano
+    const archivos = fs.readdirSync(dir).map((f) => path.join(dir, f));
+    const vieja = archivos.find((f) => JSON.parse(fs.readFileSync(f, "utf8")).key === "t:vieja");
+    const hace30dias = Date.now() - 30 * 24 * 60 * 60 * 1000;
+    fs.utimesSync(vieja, hace30dias / 1000, hace30dias / 1000);
+
+    assert.equal(await pruneSnapshots(), 1, "solo se borra la vencida");
+    assert.equal(await readSnapshot("t:vieja"), null);
+    assert.equal((await readSnapshot("t:nueva")).data, 2);
+  } finally {
+    process.env.BF_CACHE_DIR = CACHE_DIR;
     fs.rmSync(dir, { recursive: true, force: true });
   }
 });

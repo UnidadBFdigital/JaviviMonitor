@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { FRESH, jsonCached } from "@/lib/httpCache";
 import { getQuotes } from "@/lib/sources/yahoo";
 import { getNewsByCategory } from "@/lib/sources/news";
 import { getRwaProtocols } from "@/lib/sources/defillama";
@@ -86,7 +86,7 @@ export async function GET() {
     }
   }
 
-  return NextResponse.json({
+  return jsonCached({
     etfs,
     equities,
     news,
@@ -96,5 +96,5 @@ export async function GET() {
     rwaSource: rwa.ok
       ? { ok: true as const, source: rwa.source, fetchedAt: rwa.fetchedAt }
       : { ok: false as const },
-  });
+  }, FRESH.minutes30);
 }

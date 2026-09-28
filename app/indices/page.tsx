@@ -1,7 +1,7 @@
 import { PageHeader } from "@/components/PageHeader";
 import { IndicesTerminal } from "@/components/indices/IndicesTerminal";
 
-export const metadata = { title: "Blockfinity Indices — Blockfinity Research" };
+export const metadata = { title: "Blockfinity Indices — BBIM" };
 
 export default function IndicesPage() {
   return (

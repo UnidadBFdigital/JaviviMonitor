@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { FRESH, jsonCached } from "@/lib/httpCache";
 import { CANDLE_MARKETS, getDailyCandles } from "@/lib/sources/cryptocom";
 
 export async function GET(request: NextRequest) {
@@ -7,5 +8,5 @@ export async function GET(request: NextRequest) {
   const requestedDays = Number(request.nextUrl.searchParams.get("days") ?? 90);
   const days = Number.isFinite(requestedDays) ? requestedDays : 90;
   const result = await getDailyCandles(market.instrument, days);
-  return NextResponse.json(result, { status: result.ok ? 200 : 502 });
+  return jsonCached(result, FRESH.hour, { status: result.ok ? 200 : 502 });
 }

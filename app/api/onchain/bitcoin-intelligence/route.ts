@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { FRESH, jsonCached } from "@/lib/httpCache";
 import { getBitcoinDerivativesData } from "@/lib/sources/binanceFutures";
 import { getBitcoinOnchainData } from "@/lib/sources/coinmetrics";
 
@@ -11,12 +11,10 @@ export async function GET() {
   ]);
 
   const hasData = onchain.ok || derivatives.ok;
-  return NextResponse.json(
-    {
+  return jsonCached({
       onchain,
       derivatives,
       generatedAt: new Date().toISOString(),
-    },
-    { status: hasData ? 200 : 502 }
-  );
+    }, FRESH.minutes5,
+    { status: hasData ? 200 : 502 });
 }
